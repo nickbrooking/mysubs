@@ -112,7 +112,8 @@
       function displayResult(snippet) {
         var title = snippet.title;
         var id = snippet.resourceId.channelId;
-        $('#sub-container').append('<p>' + title + ' - ' + id + '</p>');
+        var thumbnail = snippet.thumbnails.default.url;
+        $('#sub-container').append('<img src="' + url + '"/><a href="https://www.youtube.com/channel/' + id + '">' + title + '<a/><br>');
         cacheResult(title, id)
       }
 
