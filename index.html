@@ -58,7 +58,7 @@
         setSigninStatus();
       }
 
-      var nextPageToken, prevPageToken, totalResults, cache;
+      var nextPageToken, prevPageToken, totalResults, subCache, vidCache;
 
       function requestSubscriptionList(pageToken) {
         $('#sub-container').html('');
@@ -100,21 +100,31 @@
         $('#sub-container').append('<img src="' + thumbnail + '"/> ' +
           '<a href="https://www.youtube.com/channel/' + id + '">' + title + '</a>' +
           '<div id="' + id + '" class="container"></div><br>');
-        cacheResult(title, id);
-        getChannelUploads(id);
+        cacheSubResult(title, id);
+        getChannelUploadsPlaylist(id);
       }
 
-      function cacheResult(title, id) {
-        if (!cache) {
-          cache = [{'id': id, 'title': title}];
-        } else if (!cache.some(obj => obj.id === id)) {
-          cache.push({'id': id, 'title': title});
+      function cacheSubResult(title, id) {
+        if (!subCache) {
+          subCache = [{'id': id, 'title': title}];
+        } else if (!subCache.some(obj => obj.id === id)) {
+          subCache.push({'id': id, 'title': title});
         }
 
-        localStorage.setItem('subscriptions', cache);
+        localStorage.setItem('subscriptions', subCache);
       }
 
-      function getChannelUploads(id) {
+      function cacheVidResult(title, id) {
+        if (!vidCache) {
+          vidCache = [{ 'id': id, 'title': title }];
+        } else if (!vidCache.some(obj => obj.id === id)) {
+          vidCache.push({ 'id': id, 'title': title });
+        }
+
+        localStorage.setItem('videos', vidCache);
+      }
+
+      function getChannelUploadsPlaylist(id) {
         var requestOptions = {
           id: id,
           part: 'snippet,contentDetails'
@@ -123,6 +133,21 @@
         request.execute(function(response) {
           var uploads = response.result.items[0].contentDetails.relatedPlaylists.uploads;
           $('#' + id).html(uploads);
+        });
+      }
+
+      function getPlaylistVideos(id) {
+        var requestOptions = {
+          playlistId: id,
+          part: 'snippet,contentDetails',
+          maxResults: 50
+        };
+        var request = gapi.client.youtube.playlistItems.list(requestOptions);
+        request.execute(function (response) {
+          var videos = response.result.items;
+          $.each(videos, function (index, item) {
+            cacheVidResult(item.snippet.title, item.snippet.resourceId.videoId);
+          });
         });
       }
 
@@ -156,7 +181,6 @@
       <br>
       <button id="prev-button" class="btn btn-secondary">Prev</button>
       <button id="next-button" class="btn btn-secondary">Next</button>
-
     </div>
   </body>
 </html>
