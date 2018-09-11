@@ -142,18 +142,24 @@
     </script>
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg">
+      <a class="navbar-brand" href="#">My Subs</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
+        <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
+
+        <div id="auth-status"></div>
+      </div>
+    </nav>
     <div id="main-content" class="container">
-
-      <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
-      <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
-
-      <div id="auth-status"></div>
-
-      <hr>
-       
       <div id="sub-info" class="badge"></div>
+      <br>
       <div id="sub-container" class="container"></div>
-
+      <br>
       <button id="prev-button" class="btn btn-secondary">Prev</button>
       <button id="next-button" class="btn btn-secondary">Next</button>
 
