@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link rel="shortcut icon" href="https://nickbrooking.github.io/mysubs/favicon.ico">
     <script>
       var GoogleAuth;
       var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
@@ -102,6 +103,7 @@
           '<div id="' + id + '" class="container"></div><br>');
         cacheSubResult(title, id);
         getChannelUploadsPlaylist(id);
+        getPlaylistVideos(id);
       }
 
       function cacheSubResult(title, id) {
@@ -185,7 +187,6 @@
   </body>
 </html>
 
-<link rel="shortcut icon" href="https://nickbrooking.github.io/mysubs/favicon.ico">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script async defer src="https://apis.google.com/js/api.js" 
