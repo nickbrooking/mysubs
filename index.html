@@ -120,6 +120,7 @@
           '<a href="https://www.youtube.com/channel/' + id + '">' + title + '<a/>' +
           '<div id="' + id + '" class="container"></div><br>');
         cacheResult(title, id);
+        getChannelUploads(id);
       }
 
       function cacheResult(title, id) {
@@ -141,10 +142,14 @@
         var request = gapi.client.youtube.channels.list(requestOptions);
         request.execute(function(response) {
           var uploads = response.relatedPlaylists.uploads;
-          $('#' + id).html('');
-          $.each(uploads, function (index, item) {
-            $('#' + id).append(item.id);
-          });
+          if (uploads) {
+            $('#' + id).html('');
+            $.each(uploads, function (index, item) {
+              $('#' + id).append(item.id);
+            });
+          } else {
+            $('#' + id).append('That channel has no uploads!');
+          }
         });
       }
 
