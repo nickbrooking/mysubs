@@ -124,7 +124,7 @@
         };
         var request = gapi.client.youtube.channels.list(requestOptions);
         request.execute(function(response) {
-          var uploads = response.result.items[0].relatedPlaylists.uploads;
+          var uploads = response.result.items[0].contentDetails.relatedPlaylists.uploads;
           $('#' + id).html(uploads);
         });
       }
