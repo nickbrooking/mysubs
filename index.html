@@ -129,7 +129,7 @@
           cache.push({'id': id, 'title': title});
         }
 
-        chrome.storage.sync.set({'subscriptions': cache});
+        localStorage.setItem({'subscriptions': cache});
       }
 
       function getChannelUploads(id) {
