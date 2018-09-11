@@ -119,7 +119,7 @@
       function cacheResult(title, id) {
         if (!cache) {
           cache = {'id': id, 'title': title};
-        } else if (!id in cache) {
+        } else if (!(id in cache)) {
           cache.push({'id': id, 'title': title});
         }
       }
