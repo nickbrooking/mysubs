@@ -3,42 +3,26 @@
     <script>
       var GoogleAuth;
       var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
+
       function handleClientLoad() {
         gapi.load('client:auth2', initClient);
       }
 
       function initClient() {
-        var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest';
-
         gapi.client.init({
-            'apiKey': 'AIzaSyAGEej4CaTnUUN7iUxJMnoetC2NZhi23FU',
-            'discoveryDocs': [discoveryUrl],
-            'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
-            'scope': SCOPE
+          'apiKey': 'AIzaSyAGEej4CaTnUUN7iUxJMnoetC2NZhi23FU',
+          'discoveryDocs': 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
+          'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
+          'scope': SCOPE
         }).then(function () {
           GoogleAuth = gapi.auth2.getAuthInstance();
-
-          // Listen for sign-in state changes.
           GoogleAuth.isSignedIn.listen(updateSigninStatus);
-
-          // Handle initial sign-in state. (Determine if user is already signed in.)
           var user = GoogleAuth.currentUser.get();
           setSigninStatus();
-
-          // Call handleAuthClick function when user clicks on
-          //      "Sign In/Authorize" button.
-          $('#sign-in-or-out-button').click(function() {
-            handleAuthClick();
-          }); 
-          $('#revoke-access-button').click(function() {
-            revokeAccess();
-          }); 
-          $('#prev-button').click(function() {
-            previousPage();
-          });
-          $('#next-button').click(function() {
-            nextPage();
-          });
+          $('#sign-in-or-out-button').click(function() { handleAuthClick(); }); 
+          $('#revoke-access-button').click(function() { revokeAccess(); }); 
+          $('#prev-button').click(function() { previousPage(); });
+          $('#next-button').click(function() { nextPage(); });
         });
       }
 
@@ -102,7 +86,7 @@
 
           var subscriptionItems = response.result.items;
           if (subscriptionItems) {
-            $.each(subscriptionItems, function(index, item) {
+            $.each(subscriptionItems, function(item) {
               displayResult(item.snippet);
             });
           } else {
@@ -111,13 +95,12 @@
         });
       }
 
-
       function displayResult(snippet) {
         var title = snippet.title;
         var id = snippet.resourceId.channelId;
         var thumbnail = snippet.thumbnails.default.url;
         $('#sub-container').append('<img src="' + thumbnail + '"/> ' +
-          '<a href="https://www.youtube.com/channel/' + id + '">' + title + '<a/>' +
+          '<a href="https://www.youtube.com/channel/' + id + '">' + title + '</a>' +
           '<div id="' + id + '" class="container"></div><br>');
         cacheResult(title, id);
         getChannelUploads(id);
@@ -141,15 +124,8 @@
         };
         var request = gapi.client.youtube.channels.list(requestOptions);
         request.execute(function(response) {
-          var uploads = response.result.relatedPlaylists.uploads;
-          if (uploads) {
-            $('#' + id).html('');
-            $.each(uploads, function (index, item) {
-              $('#' + id).append(item.id);
-            });
-          } else {
-            $('#' + id).append('That channel has no uploads!');
-          }
+          var uploads = response.result.items[0].relatedPlaylists.uploads;
+          $('#' + id).html(uploads);
         });
       }
 
