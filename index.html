@@ -109,8 +109,9 @@
       }
 
       function cacheSubResult(title, id) {
-        subCache = localStorage.getItem('subscriptions');
-        if (!subCache) {
+        if (localStorage.getItem('subscriptions')) {
+          subCache = localStorage.getItem('subscriptions');
+        } else if (!subCache) {
           subCache = [{'id': id, 'title': title}];
         } else if (!subCache.some(obj => obj.id === id)) {
           subCache.push({'id': id, 'title': title});
@@ -153,9 +154,9 @@
       }
 
       function cacheVidResult(title, id) {
-        vidCache = localStorage.getItem('videos');
-
-        if (!vidCache) {
+        if (localStorage.getItem('videos')) {
+          vidCache = localStorage.getItem('videos');
+        } else if (!vidCache) {
           vidCache = [{ 'id': id, 'title': title, 'watched': false }];
         } else if (!vidCache.some(obj => obj.id === id)) {
           vidCache.push({ 'id': id, 'title': title, 'watched': false });
@@ -180,12 +181,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="btn-toolbar">
-          <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
-          <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
-          <span id="auth-status" class="navbar-text"></span>
-        </div>
+      <div class="collapse navbar-collapse btn-toolbar" id="navbarSupportedContent">
+        <button id="sign-in-or-out-button" class="btn btn-sm">Sign In/Authorize</button>
+        <button id="revoke-access-button" class="btn btn-sm">Revoke access</button>
+        <span id="auth-status" class="navbar-text"></span>
       </div>
     </nav>
     <div id="main-content" class="container-fluid">
