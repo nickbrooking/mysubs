@@ -11,7 +11,7 @@
       function initClient() {
         gapi.client.init({
           'apiKey': 'AIzaSyAGEej4CaTnUUN7iUxJMnoetC2NZhi23FU',
-          'discoveryDocs': 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest',
+          'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
           'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
           'scope': SCOPE
         }).then(function () {
