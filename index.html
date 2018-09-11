@@ -4,19 +4,12 @@
       var GoogleAuth;
       var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
       function handleClientLoad() {
-        // Load the API's client and auth2 modules.
-        // Call the initClient function after the modules load.
         gapi.load('client:auth2', initClient);
       }
 
       function initClient() {
-        // Retrieve the discovery document for version 3 of YouTube Data API.
-        // In practice, your app can retrieve one or more discovery documents.
         var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest';
 
-        // Initialize the gapi.client object, which app uses to make API requests.
-        // Get API key and client ID from API Console.
-        // 'scope' field specifies space-delimited list of access scopes.
         gapi.client.init({
             'apiKey': 'AIzaSyAGEej4CaTnUUN7iUxJMnoetC2NZhi23FU',
             'discoveryDocs': [discoveryUrl],
@@ -51,10 +44,8 @@
 
       function handleAuthClick() {
         if (GoogleAuth.isSignedIn.get()) {
-          // User is authorized and has clicked 'Sign out' button.
           GoogleAuth.signOut();
         } else {
-          // User is not signed in. Start Google auth flow.
           GoogleAuth.signIn();
         }
       }
@@ -68,16 +59,14 @@
         var isAuthorized = user.hasGrantedScopes(SCOPE);
         if (isAuthorized) {
           $('#sign-in-or-out-button').html('Sign out');
-          $('#revoke-access-button').css('display', 'inline-block');
-          $('#auth-status').html('You are currently signed in and have granted ' +
-              'access to this app.');
+          $('#revoke-access-button').css('display', 'inline');
+          $('#auth-status').html('You are currently signed in and have granted access to this app.');
 
           requestSubscriptionList();
         } else {
           $('#sign-in-or-out-button').html('Sign In/Authorize');
           $('#revoke-access-button').css('display', 'none');
-          $('#auth-status').html('You have not authorized this app or you are ' +
-              'signed out.');
+          $('#auth-status').html('You have not authorized this app or you are signed out.');
         }
       }
 
@@ -85,10 +74,8 @@
         setSigninStatus();
       }
 
-      // Define some variables used to remember state.
       var nextPageToken, prevPageToken, totalResults;
 
-      // Retrieve the list of videos in the specified playlist.
       function requestSubscriptionList(pageToken) {
         $('#sub-container').html('');
         var requestOptions = {
@@ -104,8 +91,6 @@
           totalResults = response.result.pageInfo.totalResults;
           $('#sub-info').html('Total Subs: ' + totalResults);
 
-          // Only show pagination buttons if there is a pagination token for the
-          // next or previous page of results.
           nextPageToken = response.result.nextPageToken;
           var nextVis = nextPageToken ? 'visible' : 'hidden';
           $('#next-button').css('visibility', nextVis);
@@ -130,19 +115,17 @@
         $('#sub-container').append('<p>' + title + ' - ' + channelId + '</p>');
       }
 
-      // Retrieve the next page of videos in the playlist.
       function nextPage() {
         requestSubscriptionList(nextPageToken);
       }
 
-      // Retrieve the previous page of videos in the playlist.
       function previousPage() {
         requestSubscriptionList(prevPageToken);
       }
     </script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">My Subs</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
