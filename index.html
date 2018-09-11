@@ -45,14 +45,12 @@
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline');
           $('#auth-status').html('You are currently signed in and have granted access to this app.');
-          $('#auth-status').addClass('alert-success');
 
           requestSubscriptionList();
         } else {
           $('#sign-in-or-out-button').html('Sign In/Authorize');
           $('#revoke-access-button').css('display', 'none');
           $('#auth-status').html('You have not authorized this app or you are signed out.');
-          $('#auth-status').addClass('alert-danger');
         }
       }
 
@@ -119,8 +117,7 @@
       function getChannelUploads(id) {
         var requestOptions = {
           id: id,
-          part: 'contentDetails',
-          maxResults: 50 
+          part: 'snippet,contentDetails'
         };
         var request = gapi.client.youtube.channels.list(requestOptions);
         request.execute(function(response) {
@@ -149,7 +146,7 @@
         <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
         <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
 
-        <div id="auth-status" class="alert" role="alert"></div>
+        <span id="auth-status" class="navbar-text"></span>
       </div>
     </nav>
     <div id="main-content" class="container">
