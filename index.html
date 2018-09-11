@@ -86,7 +86,7 @@
 
           var subscriptionItems = response.result.items;
           if (subscriptionItems) {
-            $.each(subscriptionItems, function(item) {
+            $.each(subscriptionItems, function(index, item) {
               displayResult(item.snippet);
             });
           } else {
