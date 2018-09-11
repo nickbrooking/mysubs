@@ -153,7 +153,7 @@
       }
 
       function cacheVidResult(title, id) {
-        vidCache = localstorage.getItem('videos');
+        vidCache = localStorage.getItem('videos');
 
         if (!vidCache) {
           vidCache = [{ 'id': id, 'title': title, 'watched': false }];
@@ -163,8 +163,6 @@
 
         localStorage.setItem('videos', JSON.stringify(vidCache));
       }
-
-
 
       function nextPage() {
         requestSubscriptionList(nextPageToken);
@@ -183,10 +181,11 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
-        <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
-
-        <span id="auth-status" class="navbar-text"></span>
+        <div class="btn-toolbar">
+          <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
+          <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
+          <span id="auth-status" class="navbar-text"></span>
+        </div>
       </div>
     </nav>
     <div id="main-content" class="container-fluid">
