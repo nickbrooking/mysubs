@@ -103,7 +103,6 @@
           '<div id="' + id + '" class="container"></div><br>');
         cacheSubResult(title, id);
         getChannelUploadsPlaylist(id);
-        getPlaylistVideos(id);
       }
 
       function cacheSubResult(title, id) {
@@ -133,8 +132,9 @@
         };
         var request = gapi.client.youtube.channels.list(requestOptions);
         request.execute(function(response) {
-          var uploads = response.result.items[0].contentDetails.relatedPlaylists.uploads;
-          $('#' + id).html(uploads);
+          var uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
+          //$('#' + id).html(uploads);
+          getPlaylistVideos(uploadId);
         });
       }
 
