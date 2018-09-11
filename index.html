@@ -129,7 +129,7 @@
           cache.push({'id': id, 'title': title});
         }
 
-        localStorage.setItem({'subscriptions': cache});
+        localStorage.setItem('subscriptions', cache);
       }
 
       function getChannelUploads(id) {
@@ -168,7 +168,7 @@
         <button id="sign-in-or-out-button" class="btn btn-primary">Sign In/Authorize</button>
         <button id="revoke-access-button" class="btn btn-primary">Revoke access</button>
 
-        <div id="auth-status" class="alert"></div>
+        <div id="auth-status" class="alert" role="alert"></div>
       </div>
     </nav>
     <div id="main-content" class="container">
@@ -181,12 +181,12 @@
 
     </div>
   </body>
-
-  <link rel="shortcut icon" href="https://nickbrooking.github.io/mysubs/favicon.ico">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script async defer src="https://apis.google.com/js/api.js" 
-          onload="this.onload=function(){};handleClientLoad()" 
-          onreadystatechange="if (this.readyState === 'complete') this.onload()">
-  </script>
 </html>
+
+<link rel="shortcut icon" href="https://nickbrooking.github.io/mysubs/favicon.ico">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script async defer src="https://apis.google.com/js/api.js" 
+        onload="this.onload=function(){};handleClientLoad()" 
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>
