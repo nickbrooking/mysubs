@@ -74,7 +74,7 @@
         setSigninStatus();
       }
 
-      var nextPageToken, prevPageToken, totalResults;
+      var nextPageToken, prevPageToken, totalResults, cache;
 
       function requestSubscriptionList(pageToken) {
         $('#sub-container').html('');
@@ -109,10 +109,17 @@
         });
       }
 
-      function displayResult(channelSnippet) {
-        var title = channelSnippet.title;
-        var channelId = channelSnippet.resourceId.channelId;
-        $('#sub-container').append('<p>' + title + ' - ' + channelId + '</p>');
+      function displayResult(snippet) {
+        var title = snippet.title;
+        var id = snippet.resourceId.channelId;
+        $('#sub-container').append('<p>' + title + ' - ' + id + '</p>');
+        cacheResult(title, id)
+      }
+
+      function cacheResult(title, id) {
+        if (!id in cache) {
+          cache.push({'id': id, 'title': title})
+        }
       }
 
       function nextPage() {
