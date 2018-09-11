@@ -63,6 +63,7 @@
 
       function requestSubscriptionList(pageToken) {
         $('#sub-container').html('');
+        $('#videos').html('');
         var requestOptions = {
           mine: true,
           part: 'snippet',
@@ -74,6 +75,8 @@
         var request = gapi.client.youtube.subscriptions.list(requestOptions);
         request.execute(function(response) {
           totalResults = response.result.pageInfo.totalResults;
+          localStorage.setItem('totalsubs', totalResults);
+
           $('#sub-info').html('Total Subs: ' + totalResults);
 
           nextPageToken = response.result.nextPageToken;
@@ -86,7 +89,7 @@
           var subscriptionItems = response.result.items;
           if (subscriptionItems) {
             $.each(subscriptionItems, function(index, item) {
-              displayResult(item.snippet);
+              displayAndCacheSubResult(item.snippet);
             });
           } else {
             $('#sub-container').html('Sorry you have no subscriptions');
@@ -94,7 +97,7 @@
         });
       }
 
-      function displayResult(snippet) {
+      function displayAndCacheSubResult(snippet) {
         var title = snippet.title;
         var id = snippet.resourceId.channelId;
         var thumbnail = snippet.thumbnails.default.url;
@@ -106,23 +109,13 @@
       }
 
       function cacheSubResult(title, id) {
+        subCache = localStorage.getItem('subscriptions');
         if (!subCache) {
           subCache = [{'id': id, 'title': title}];
         } else if (!subCache.some(obj => obj.id === id)) {
           subCache.push({'id': id, 'title': title});
         }
-
-        localStorage.setItem('subscriptions', subCache);
-      }
-
-      function cacheVidResult(title, id) {
-        if (!vidCache) {
-          vidCache = [{ 'id': id, 'title': title }];
-        } else if (!vidCache.some(obj => obj.id === id)) {
-          vidCache.push({ 'id': id, 'title': title });
-        }
-
-        localStorage.setItem('videos', vidCache);
+        localStorage.setItem('subscriptions', JSON.stringify(subCache));
       }
 
       function getChannelUploadsPlaylist(id) {
@@ -133,7 +126,6 @@
         var request = gapi.client.youtube.channels.list(requestOptions);
         request.execute(function(response) {
           var uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
-          //$('#' + id).html(uploads);
           getPlaylistVideos(uploadId);
         });
       }
@@ -148,10 +140,31 @@
         request.execute(function (response) {
           var videos = response.result.items;
           $.each(videos, function (index, item) {
-            cacheVidResult(item.snippet.title, item.snippet.resourceId.videoId);
+            displayAndCacheVidResult(item.snippet)
           });
         });
       }
+
+      function displayAndCacheVidResult(snippet) {
+        var title = snippet.title;
+        var vidId = snippet.resourceId.videoId;
+        cacheVidResult(title, vidId);
+        $('#videos').append('<a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a> - Watched: ' + vidCache[vidId].watched);
+      }
+
+      function cacheVidResult(title, id) {
+        vidCache = localstorage.getItem('videos');
+
+        if (!vidCache) {
+          vidCache = [{ 'id': id, 'title': title, 'watched': false }];
+        } else if (!vidCache.some(obj => obj.id === id)) {
+          vidCache.push({ 'id': id, 'title': title, 'watched': false });
+        }
+
+        localStorage.setItem('videos', JSON.stringify(vidCache));
+      }
+
+
 
       function nextPage() {
         requestSubscriptionList(nextPageToken);
@@ -176,15 +189,22 @@
         <span id="auth-status" class="navbar-text"></span>
       </div>
     </nav>
-    <div id="main-content" class="container">
-      <div id="sub-info" class="badge"></div>
-      <br>
-      <div id="sub-container" class="container"></div>
-      <br>
-      <button id="prev-button" class="btn btn-secondary">Prev</button>
-      <button id="next-button" class="btn btn-secondary">Next</button>
+    <div id="main-content" class="container-fluid">
+      <div class="row align-items-start">
+        <div class="col">
+          <div id="sub-info" class="badge"></div>
+          <br>
+          <div id="sub-container" class="container"></div>
+          <br>
+          <button id="prev-button" class="btn btn-secondary">Prev</button>
+          <button id="next-button" class="btn btn-secondary">Next</button>
+        </div>
+        <div class="col">
+          <div id="videos" class="container"></div>
+        </div>
+      </div>
     </div>
-  </body>
+</body>
 </html>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
