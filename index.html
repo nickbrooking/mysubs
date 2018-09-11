@@ -118,8 +118,8 @@
 
       function cacheResult(title, id) {
         if (!cache) {
-          cache = {'id': id, 'title': title};
-        } else if (!(id in cache)) {
+          cache = [{'id': id, 'title': title}];
+        } else if (!cache.hasOwnProperty(id)) {
           cache.push({'id': id, 'title': title});
         }
       }
