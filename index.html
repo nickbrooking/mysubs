@@ -1,239 +1,240 @@
 <html>
-  <head>
-    <title>My Subs</title>
-    <link rel="shortcut icon" href="https://nickbrooking.github.io/mysubs/favicon.ico">
-    <script>
-      var GoogleAuth;
-      var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
+<head>
+  <title>My Subs</title>
+  <link rel="shortcut icon" href="https://nickbrooking.github.io/mysubs/favicon.ico">
+  <script>
+    var GoogleAuth;
+    var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
 
-      function handleClientLoad() {
-        gapi.load('client:auth2', initClient);
-      }
+    function handleClientLoad() {
+      gapi.load('client:auth2', initClient);
+    }
 
-      function initClient() {
-        gapi.client.init({
-          'apiKey': 'AIzaSyAGEej4CaTnUUN7iUxJMnoetC2NZhi23FU',
-          'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
-          'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
-          'scope': SCOPE
-        }).then(function () {
-          GoogleAuth = gapi.auth2.getAuthInstance();
-          GoogleAuth.isSignedIn.listen(updateSigninStatus);
-          var user = GoogleAuth.currentUser.get();
-          setSigninStatus();
-          $('#sign-in-or-out-button').click(function() { handleAuthClick(); }); 
-          $('#revoke-access-button').click(function() { revokeAccess(); }); 
-          $('#prev-button').click(function() { previousPage(); });
-          $('#next-button').click(function() { nextPage(); });
-        });
-      }
-
-      function handleAuthClick() {
-        if (GoogleAuth.isSignedIn.get()) {
-          GoogleAuth.signOut();
-        } else {
-          GoogleAuth.signIn();
-        }
-      }
-
-      function revokeAccess() {
-        GoogleAuth.disconnect();
-      }
-
-      function setSigninStatus(isSignedIn) {
+    function initClient() {
+      gapi.client.init({
+        'apiKey': 'AIzaSyAGEej4CaTnUUN7iUxJMnoetC2NZhi23FU',
+        'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
+        'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
+        'scope': SCOPE
+      }).then(function () {
+        GoogleAuth = gapi.auth2.getAuthInstance();
+        GoogleAuth.isSignedIn.listen(updateSigninStatus);
         var user = GoogleAuth.currentUser.get();
-        var isAuthorized = user.hasGrantedScopes(SCOPE);
-        if (isAuthorized) {
-          //$('#sign-in-or-out-button').html('Sign out');
-          //$('#revoke-access-button').css('display', 'inline');
-          //$('#auth-status').html(user.getBasicProfile().getName());
-
-          requestSubscriptionList();
-        } else {
-          //$('#sign-in-or-out-button').html('Sign In/Authorize');
-          //$('#revoke-access-button').css('display', 'none');
-          //$('#auth-status').html('You have not authorized this app or you are signed out.');
-        }
-      }
-
-      function updateSigninStatus(isSignedIn) {
         setSigninStatus();
+        $('#sign-in-or-out-button').click(function () { handleAuthClick(); });
+        $('#revoke-access-button').click(function () { revokeAccess(); });
+        $('#prev-button').click(function () { previousPage(); });
+        $('#next-button').click(function () { nextPage(); });
+      });
+    }
+
+    function handleAuthClick() {
+      if (GoogleAuth.isSignedIn.get()) {
+        GoogleAuth.signOut();
+      } else {
+        GoogleAuth.signIn();
       }
+    }
 
-      var nextPageToken, prevPageToken, totalResults, subCache, vidCache;
+    function revokeAccess() {
+      GoogleAuth.disconnect();
+    }
 
-      function requestSubscriptionList(pageToken) {
-        $('#sub-container').html('');
-        $('#videos').html('');
-        var requestOptions = {
-          mine: true,
-          part: 'snippet',
-          maxResults: 5 
-        };
-        if (pageToken) {
-          requestOptions.pageToken = pageToken;
-        }
-        var request = gapi.client.youtube.subscriptions.list(requestOptions);
-        request.execute(function(response) {
-          totalResults = response.result.pageInfo.totalResults;
-          localStorage.setItem('totalsubs', totalResults);
+    function setSigninStatus(isSignedIn) {
+      var user = GoogleAuth.currentUser.get();
+      var isAuthorized = user.hasGrantedScopes(SCOPE);
+      if (isAuthorized) {
+        //$('#sign-in-or-out-button').html('Sign out');
+        //$('#revoke-access-button').css('display', 'inline');
+        //$('#auth-status').html(user.getBasicProfile().getName());
 
-          $('#sub-info').html('Total Subs: ' + totalResults);
-
-          nextPageToken = response.result.nextPageToken;
-          var nextVis = nextPageToken ? 'visible' : 'hidden';
-          $('#next-button').css('visibility', nextVis);
-          prevPageToken = response.result.prevPageToken
-          var prevVis = prevPageToken ? 'visible' : 'hidden';
-          $('#prev-button').css('visibility', prevVis);
-
-          var subscriptionItems = response.result.items;
-          if (subscriptionItems) {
-            $.each(subscriptionItems, function(index, item) {
-              displayAndCacheSubResult(item.snippet);
-            });
-          } else {
-            $('#sub-container').html('Sorry you have no subscriptions');
-          }
-        });
+        requestSubscriptionList();
+      } else {
+        //$('#sign-in-or-out-button').html('Sign In/Authorize');
+        //$('#revoke-access-button').css('display', 'none');
+        //$('#auth-status').html('You have not authorized this app or you are signed out.');
       }
+    }
 
-      function displayAndCacheSubResult(snippet) {
-        var title = snippet.title;
-        var id = snippet.resourceId.channelId;
-        var thumbnail = snippet.thumbnails.default.url;
-        $('#sub-container').append('<img src="' + thumbnail + '"/> ' +
-          '<a href="https://www.youtube.com/channel/' + id + '">' + title + '</a>' +
-          '<div id="' + id + '" class="col"></div><br>');
-        cacheSubResult(title, id);
-        getChannelUploadsPlaylist(id);
+    function updateSigninStatus(isSignedIn) {
+      setSigninStatus();
+    }
+
+    var nextPageToken, prevPageToken, totalResults, subCache, vidCache;
+
+    function requestSubscriptionList(pageToken) {
+      $('#sub-container').html('');
+      $('#videos').html('');
+      var requestOptions = {
+        mine: true,
+        part: 'snippet',
+        maxResults: 5
+      };
+      if (pageToken) {
+        requestOptions.pageToken = pageToken;
       }
+      var request = gapi.client.youtube.subscriptions.list(requestOptions);
+      request.execute(function (response) {
+        totalResults = response.result.pageInfo.totalResults;
+        localStorage.setItem('totalsubs', totalResults);
 
-      function cacheSubResult(title, id) {
-        if (localStorage.getItem('subscriptions')) {
-          //subCache = localStorage.getItem('subscriptions');
-        } else if (!subCache) {
-          subCache = [{'id': id, 'title': title}];
-        } else if (!subCache.some(obj => obj.id === id)) {
-          subCache.push({'id': id, 'title': title});
-        }
-        //localStorage.setItem('subscriptions', JSON.stringify(subCache));
-      }
+        $('#sub-info').html('Total Subs: ' + totalResults);
 
-      function getChannelUploadsPlaylist(id) {
-        var requestOptions = {
-          id: id,
-          part: 'snippet,contentDetails'
-        };
-        var request = gapi.client.youtube.channels.list(requestOptions);
-        request.execute(function(response) {
-          var uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
-          getPlaylistVideos(uploadId);
-        });
-      }
+        nextPageToken = response.result.nextPageToken;
+        var nextVis = nextPageToken ? 'visible' : 'hidden';
+        $('#next-button').css('visibility', nextVis);
+        prevPageToken = response.result.prevPageToken
+        var prevVis = prevPageToken ? 'visible' : 'hidden';
+        $('#prev-button').css('visibility', prevVis);
 
-      function getPlaylistVideos(id) {
-        var requestOptions = {
-          playlistId: id,
-          part: 'snippet,contentDetails',
-          maxResults: 5
-        };
-        var request = gapi.client.youtube.playlistItems.list(requestOptions);
-        request.execute(function (response) {
-          var videos = response.result.items;
-          $.each(videos, function (index, item) {
-            displayAndCacheVidResult(item)
+        var subscriptionItems = response.result.items;
+        if (subscriptionItems) {
+          $.each(subscriptionItems, function (index, item) {
+            displayAndCacheSubResult(item.snippet);
           });
-        });
-      }
-
-      function displayAndCacheVidResult(item) {
-        var title = item.snippet.title;
-        var vidId = item.contentDetails.videoId;
-        var published = item.contentDetails.videoPublishedAt;
-        var channel = item.snippet.channelTitle;
-        cacheVidResult(title, vidId, published, channel);
-        //var watched = vidCache.find(function (index, id, t, w) {
-        //  if (id == vidId) {
-        //    return w;
-        //  }
-        //});
-        $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a><br>' + channel + '<br>' + published + '</div >');
-      }
-
-      function cacheVidResult(title, id, published, channel) {
-        if (localStorage.getItem('videos')) {
-          //vidCache = localStorage.getItem('videos');
-        } else if (!vidCache) {
-          vidCache = [{ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' }];
-        } else if (!vidCache.some(obj => obj.id === id)) {
-          vidCache.push({ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' });
+        } else {
+          $('#sub-container').html('Sorry you have no subscriptions');
         }
+      });
+    }
 
-        //localStorage.setItem('videos', JSON.stringify(vidCache));
+    function displayAndCacheSubResult(snippet) {
+      var title = snippet.title;
+      var id = snippet.resourceId.channelId;
+      var thumbnail = snippet.thumbnails.default.url;
+      $('#sub-container').append('<img src="' + thumbnail + '"/> ' +
+        '<a href="https://www.youtube.com/channel/' + id + '">' + title + '</a>' +
+        '<div id="' + id + '" class="col"></div><br>');
+      cacheSubResult(title, id);
+      getChannelUploadsPlaylist(id);
+    }
+
+    function cacheSubResult(title, id) {
+      if (localStorage.getItem('subscriptions')) {
+        //subCache = localStorage.getItem('subscriptions');
+      } else if (!subCache) {
+        subCache = [{ 'id': id, 'title': title }];
+      } else if (!subCache.some(obj => obj.id === id)) {
+        subCache.push({ 'id': id, 'title': title });
+      }
+      //localStorage.setItem('subscriptions', JSON.stringify(subCache));
+    }
+
+    function getChannelUploadsPlaylist(id) {
+      var requestOptions = {
+        id: id,
+        part: 'snippet,contentDetails'
+      };
+      var request = gapi.client.youtube.channels.list(requestOptions);
+      request.execute(function (response) {
+        var uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
+        getPlaylistVideos(uploadId);
+      });
+    }
+
+    function getPlaylistVideos(id) {
+      var requestOptions = {
+        playlistId: id,
+        part: 'snippet,contentDetails',
+        maxResults: 5
+      };
+      var request = gapi.client.youtube.playlistItems.list(requestOptions);
+      request.execute(function (response) {
+        var videos = response.result.items;
+        $.each(videos, function (index, item) {
+          displayAndCacheVidResult(item)
+        });
+      });
+    }
+
+    function displayAndCacheVidResult(item) {
+      var title = item.snippet.title;
+      var vidId = item.contentDetails.videoId;
+      var published = item.contentDetails.videoPublishedAt;
+      var channel = item.snippet.channelTitle;
+      cacheVidResult(title, vidId, published, channel);
+      //var watched = vidCache.find(function (index, id, t, w) {
+      //  if (id == vidId) {
+      //    return w;
+      //  }
+      //});
+      $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a><br>' + channel + '<br>' + published + '</div >');
+    }
+
+    function cacheVidResult(title, id, published, channel) {
+      if (localStorage.getItem('videos')) {
+        //vidCache = localStorage.getItem('videos');
+      } else if (!vidCache) {
+        vidCache = [{ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' }];
+      } else if (!vidCache.some(obj => obj.id === id)) {
+        vidCache.push({ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' });
       }
 
-      function nextPage() {
-        requestSubscriptionList(nextPageToken);
-      }
+      //localStorage.setItem('videos', JSON.stringify(vidCache));
+    }
 
-      function previousPage() {
-        requestSubscriptionList(prevPageToken);
-      }
-    </script>
-  </head>
-  <body class="text-light bg-dark">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-      <a class="navbar-brand" href="#">My Subs</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    function nextPage() {
+      requestSubscriptionList(nextPageToken);
+    }
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
-            <div class="dropdown-menu" aria-labelledby="auth-status">
-              <a class="dropdown-item" id="sign-in-or-out-button">Sign In</a>
-              <a class="dropdown-item" id="revoke-access-button">Revoke Access</a>
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown link
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    function previousPage() {
+      requestSubscriptionList(prevPageToken);
+    }
+  </script>
+</head>
+<body class="text-light bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+    <a class="navbar-brand" href="#">My Subs</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <div id="main-content" class="container-fluid">
-      <div class="row align-items-start">
-        <div class="col-sm-auto">
-          <div id="sub-info"></div>
-          <br>
-          <div id="sub-container"></div>
-          <br>
-          <button id="prev-button" class="btn btn-secondary">Prev</button>
-          <button id="next-button" class="btn btn-secondary">Next</button>
-        </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+          <div class="dropdown-menu" aria-labelledby="auth-status">
+            <a class="dropdown-item" id="sign-in-or-out-button">Sign In</a>
+            <a class="dropdown-item" id="revoke-access-button">Revoke Access</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown link
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="main-content" class="container-fluid">
+    <div class="row align-items-start">
+      <div class="col-sm-auto">
+        <div id="sub-info"></div>
         <br>
-        <div class="col-lg">
-          <div id="videos" class="row"></div>
-        </div>
+        <div id="sub-container"></div>
+        <br>
+        <button id="prev-button" class="btn btn-secondary">Prev</button>
+        <button id="next-button" class="btn btn-secondary">Next</button>
+      </div>
+      <br>
+      <div class="col-lg">
+        <div id="videos" class="row"></div>
       </div>
     </div>
+  </div>
 </body>
 </html>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script async defer src="https://apis.google.com/js/api.js" 
-        onload="this.onload=function(){};handleClientLoad()" 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script async defer src="https://apis.google.com/js/api.js"
+        onload="this.onload=function(){};handleClientLoad()"
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
