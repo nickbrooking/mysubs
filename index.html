@@ -150,12 +150,12 @@
         var title = snippet.title;
         var vidId = snippet.resourceId.videoId;
         cacheVidResult(title, vidId);
-        $('#videos').append('<a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a> - Watched: ' + vidCache.find(function (el) {
-          if (el.id == vidId) {
-            return el.watched;
+        var watched = vidCache.find(function (index, id, t, w) {
+          if (id == vidId) {
+            return w;
           }
-        }));
-      }
+        )};
+        $('#videos').append('<a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a> - Watched: ' + watched + '<br>');
 
       function cacheVidResult(title, id) {
         if (localStorage.getItem('videos')) {
@@ -195,7 +195,7 @@
     </nav>
     <div id="main-content" class="container-fluid">
       <div class="row align-items-start">
-        <div class="col">
+        <div class="col-sm">
           <div id="sub-info" class="badge"></div>
           <br>
           <div id="sub-container" class="container"></div>
@@ -203,7 +203,7 @@
           <button id="prev-button" class="btn btn-secondary">Prev</button>
           <button id="next-button" class="btn btn-secondary">Next</button>
         </div>
-        <div class="col">
+        <div class="col-lg">
           <div id="videos" class="container"></div>
         </div>
       </div>
