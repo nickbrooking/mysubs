@@ -44,15 +44,15 @@
       var user = GoogleAuth.currentUser.get();
       var isAuthorized = user.hasGrantedScopes(SCOPE);
       if (isAuthorized) {
-        //$('#sign-in-or-out-button').html('Sign out');
-        //$('#revoke-access-button').css('display', 'inline');
-        //$('#auth-status').html(user.getBasicProfile().getName());
+        $('#sign-in-or-out-button').html('Sign out');
+        $('#revoke-access-button').css('display', 'inline');
+        $('#auth-status').html(user.getBasicProfile().getName());
 
         requestSubscriptionList();
       } else {
-        //$('#sign-in-or-out-button').html('Sign In/Authorize');
-        //$('#revoke-access-button').css('display', 'none');
-        //$('#auth-status').html('You have not authorized this app or you are signed out.');
+        $('#sign-in-or-out-button').html('Sign In/Authorize');
+        $('#revoke-access-button').css('display', 'none');
+        $('#auth-status').html('You have not authorized this app or you are signed out.');
       }
     }
 
@@ -196,16 +196,6 @@
           <div class="dropdown-menu" aria-labelledby="auth-status">
             <a class="dropdown-item" id="sign-in-or-out-button">Sign In</a>
             <a class="dropdown-item" id="revoke-access-button">Revoke Access</a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
           </div>
         </li>
       </ul>
