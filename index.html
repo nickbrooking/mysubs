@@ -68,7 +68,7 @@
       var requestOptions = {
         mine: true,
         part: 'snippet',
-        maxResults: 10 
+        maxResults: 25 
       };
       if (pageToken) {
         requestOptions.pageToken = pageToken;
@@ -95,6 +95,11 @@
         }
 
         $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
+
+        // Fill the cache
+        if (nextPageToken) {
+          requestSubscriptionList(nextPageToken);
+        }
       });
     }
 
