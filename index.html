@@ -78,7 +78,7 @@
         totalResults = response.result.pageInfo.totalResults;
         localStorage.setItem('totalsubs', totalResults);
 
-        $('#sub-info').html('Total Subs: ' + totalResults);
+        $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.Length);
 
         nextPageToken = response.result.nextPageToken;
         var nextVis = nextPageToken ? 'visible' : 'hidden';
@@ -197,7 +197,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" onclick="showCachedVideos();">Display Cached Videos</a>
+          <a class="nav-link" onclick="showCachedVideos();" role="button">Display Cached Videos</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
@@ -215,10 +215,10 @@
       <div class="col-sm-auto">
         <div id="sub-info"></div>
         <br>
-        <div id="sub-container"></div>
-        <br>
         <button id="prev-button" class="btn btn-secondary">Prev</button>
         <button id="next-button" class="btn btn-secondary">Next</button>
+        <br>
+        <div id="sub-container"></div>
       </div>
       <br>
       <div class="col-lg">
