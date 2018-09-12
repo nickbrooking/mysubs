@@ -67,7 +67,7 @@
         var requestOptions = {
           mine: true,
           part: 'snippet',
-          maxResults: 50 
+          maxResults: 5 
         };
         if (pageToken) {
           requestOptions.pageToken = pageToken;
@@ -135,7 +135,7 @@
         var requestOptions = {
           playlistId: id,
           part: 'snippet,contentDetails',
-          maxResults: 50
+          maxResults: 5
         };
         var request = gapi.client.youtube.playlistItems.list(requestOptions);
         request.execute(function (response) {
@@ -148,24 +148,25 @@
 
       function displayAndCacheVidResult(snippet) {
         var title = snippet.title;
-        var vidId = snippet.resourceId.videoId;
-        cacheVidResult(title, vidId);
+        var vidId = snippet.contentDetails.videoId;
+        var published = snippet.contentDetails.videoPublishedAt;
+        var channel = snippet.channelTitle;
+        cacheVidResult(title, vidId, published, channel);
         //var watched = vidCache.find(function (index, id, t, w) {
         //  if (id == vidId) {
         //    return w;
         //  }
         //});
-        var watched = 'no';
-        $('#videos').append('<a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a> - Watched: ' + watched + '<br>');
+        $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a><br>' + channel + '<br>' + published + '</div > ');
       }
 
-      function cacheVidResult(title, id) {
+      function cacheVidResult(title, id, published, channel) {
         if (localStorage.getItem('videos')) {
           //vidCache = localStorage.getItem('videos');
         } else if (!vidCache) {
-          vidCache = [{ 'id': id, 'title': title, 'watched': false }];
+          vidCache = [{ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' }];
         } else if (!vidCache.some(obj => obj.id === id)) {
-          vidCache.push({ 'id': id, 'title': title, 'watched': false });
+          vidCache.push({ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' });
         }
 
         //localStorage.setItem('videos', JSON.stringify(vidCache));
@@ -189,15 +190,15 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <button id="sign-in-or-out-button" class="btn btn-sm">Sign In/Authorize</button>
-        <p> </p>
+        <p>&nbsp;</p>
         <button id="revoke-access-button" class="btn btn-sm">Revoke access</button>
-        <p> </p>
+        <p>&nbsp;</p>
         <span id="auth-status" class="navbar-text"></span>
       </div>
     </nav>
     <div id="main-content" class="container-fluid">
       <div class="row align-items-start">
-        <div class="col-sm">
+        <div class="col-sm-auto">
           <div id="sub-info" class="badge"></div>
           <br>
           <div id="sub-container" class="container"></div>
@@ -205,8 +206,8 @@
           <button id="prev-button" class="btn btn-secondary">Prev</button>
           <button id="next-button" class="btn btn-secondary">Next</button>
         </div>
-        <div class="col-lg">
-          <div id="videos" class="container"></div>
+        <div class="col-lg-auto">
+          <div id="videos" class="row"></div>
         </div>
       </div>
     </div>
