@@ -110,13 +110,13 @@
 
       function cacheSubResult(title, id) {
         if (localStorage.getItem('subscriptions')) {
-          subCache = localStorage.getItem('subscriptions');
+          //subCache = localStorage.getItem('subscriptions');
         } else if (!subCache) {
           subCache = [{'id': id, 'title': title}];
         } else if (!subCache.some(obj => obj.id === id)) {
           subCache.push({'id': id, 'title': title});
         }
-        localStorage.setItem('subscriptions', JSON.stringify(subCache));
+        //localStorage.setItem('subscriptions', JSON.stringify(subCache));
       }
 
       function getChannelUploadsPlaylist(id) {
@@ -155,14 +155,14 @@
 
       function cacheVidResult(title, id) {
         if (localStorage.getItem('videos')) {
-          vidCache = localStorage.getItem('videos');
+          //vidCache = localStorage.getItem('videos');
         } else if (!vidCache) {
           vidCache = [{ 'id': id, 'title': title, 'watched': false }];
         } else if (!vidCache.some(obj => obj.id === id)) {
           vidCache.push({ 'id': id, 'title': title, 'watched': false });
         }
 
-        localStorage.setItem('videos', JSON.stringify(vidCache));
+        //localStorage.setItem('videos', JSON.stringify(vidCache));
       }
 
       function nextPage() {
