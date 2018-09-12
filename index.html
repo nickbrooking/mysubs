@@ -68,7 +68,7 @@
       var requestOptions = {
         mine: true,
         part: 'snippet',
-        maxResults: 5
+        maxResults: 10 
       };
       if (pageToken) {
         requestOptions.pageToken = pageToken;
@@ -136,7 +136,7 @@
       var requestOptions = {
         playlistId: id,
         part: 'snippet,contentDetails',
-        maxResults: 5
+        maxResults: 10 
       };
       var request = gapi.client.youtube.playlistItems.list(requestOptions);
       request.execute(function (response) {
@@ -150,7 +150,7 @@
     function displayAndCacheVidResult(item) {
       var title = item.snippet.title;
       var vidId = item.contentDetails.videoId;
-      var published = item.contentDetails.videoPublishedAt;
+      var published = new Date(Date.parse(item.contentDetails.videoPublishedAt));
       var channel = item.snippet.channelTitle;
       cacheVidResult(title, vidId, published, channel);
       //var watched = vidCache.find(function (index, id, t, w) {
@@ -158,7 +158,6 @@
       //    return w;
       //  }
       //});
-      $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a><br>' + channel + '<br>' + published + '</div >');
     }
 
     function cacheVidResult(title, id, published, channel) {
@@ -180,6 +179,12 @@
     function previousPage() {
       requestSubscriptionList(prevPageToken);
     }
+
+    function showCachedVideos() {
+      $.each(vidCache, function (index, video) {
+        $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a><br>' + video.channel + '<br>' + video.published + '</div >');
+      });
+    }
   </script>
 </head>
 <body class="text-light bg-dark">
@@ -191,6 +196,9 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" onclick="showCachedVideos();">Display Cached Videos</a>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
           <div class="dropdown-menu" aria-labelledby="auth-status">
