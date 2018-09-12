@@ -156,6 +156,7 @@
       var title = item.snippet.title;
       var vidId = item.contentDetails.videoId;
       var published = new Date(Date.parse(item.contentDetails.videoPublishedAt));
+      published = published.getFullYear() + '-' + published.getMonth() + '-' + published.getDate() + ' ' + published.getHours() + ':' + published.getMinutes();
       var channel = item.snippet.channelTitle;
       cacheVidResult(title, vidId, published, channel);
       //var watched = vidCache.find(function (index, id, t, w) {
@@ -178,11 +179,11 @@
     }
 
     function nextPage() {
-      requestSubscriptionList(nextPageToken);
+      requestSubscriptionList(false, nextPageToken);
     }
 
     function previousPage() {
-      requestSubscriptionList(prevPageToken);
+      requestSubscriptionList(false, prevPageToken);
     }
 
     function showCachedVideos() {
@@ -202,17 +203,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link btn" onclick="requestSubscriptionList(true);" role="button">Cache all subs</a>
-          <a class="nav-link btn" onclick="showCachedVideos();" role="button">Display Cached Videos</a>
+          <button class="btn" onclick="requestSubscriptionList(true);">Cache all subs</button>
+        </li>
+        <li class="nav-item">
+          <button class="btn" onclick="showCachedVideos();">Display Cached Videos</button>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
+          <div class="dropdown-menu" aria-labelledby="auth-status">
+            <a class="dropdown-item" id="sign-in-or-out-button">Sign In</a>
+            <a class="dropdown-item" id="revoke-access-button">Revoke Access</a>
+          </div>
         </li>
       </ul>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
-        <div class="dropdown-menu" aria-labelledby="auth-status">
-          <a class="dropdown-item" id="sign-in-or-out-button">Sign In</a>
-          <a class="dropdown-item" id="revoke-access-button">Revoke Access</a>
-        </div>
-      </li>
     </div>
   </nav>
 
