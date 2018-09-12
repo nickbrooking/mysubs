@@ -150,11 +150,12 @@
         var title = snippet.title;
         var vidId = snippet.resourceId.videoId;
         cacheVidResult(title, vidId);
-        var watched = vidCache.find(function (index, id, t, w) {
-          if (id == vidId) {
-            return w;
-          }
-        });
+        //var watched = vidCache.find(function (index, id, t, w) {
+        //  if (id == vidId) {
+        //    return w;
+        //  }
+        //});
+        var watched = false;
         $('#videos').append('<a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a> - Watched: ' + watched + '<br>');
 
       function cacheVidResult(title, id) {
