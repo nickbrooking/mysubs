@@ -48,7 +48,7 @@
         $('#revoke-access-button').css('display', 'inline');
         $('#auth-status').html(user.getBasicProfile().getName());
 
-        requestSubscriptionList();
+        //requestSubscriptionList();
       } else {
         $('#sign-in-or-out-button').html('Sign In/Authorize');
         $('#revoke-access-button').css('display', 'none');
@@ -62,7 +62,7 @@
 
     var nextPageToken, prevPageToken, totalResults, subCache, vidCache;
 
-    function requestSubscriptionList(pageToken) {
+    function requestSubscriptionList(fullCache, pageToken) {
       $('#sub-container').html('');
       $('#videos').html('');
       var requestOptions = {
@@ -97,8 +97,8 @@
         $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
 
         // Fill the cache
-        if (nextPageToken) {
-          requestSubscriptionList(nextPageToken);
+        if (nextPageToken && fullCache) {
+          requestSubscriptionList(fullCache, nextPageToken);
         }
       });
     }
@@ -202,7 +202,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" onclick="showCachedVideos();" role="button">Display Cached Videos</a>
+          <a class="nav-link btn" onclick="requestSubscriptionList(true);" role="button">Cache all subs</a>
+          <a class="nav-link btn" onclick="showCachedVideos();" role="button">Display Cached Videos</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</a>
