@@ -45,7 +45,7 @@
         if (isAuthorized) {
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline');
-          $('#auth-status').html('You are currently signed in and have granted access to this app.');
+          $('#auth-status').html('Signed in as: ' + user);
 
           requestSubscriptionList();
         } else {
@@ -141,16 +141,16 @@
         request.execute(function (response) {
           var videos = response.result.items;
           $.each(videos, function (index, item) {
-            displayAndCacheVidResult(item.snippet)
+            displayAndCacheVidResult(item)
           });
         });
       }
 
-      function displayAndCacheVidResult(snippet) {
-        var title = snippet.title;
-        var vidId = snippet.contentDetails.videoId;
-        var published = snippet.contentDetails.videoPublishedAt;
-        var channel = snippet.channelTitle;
+      function displayAndCacheVidResult(item) {
+        var title = item.snippet.title;
+        var vidId = item.contentDetails.videoId;
+        var published = item.contentDetails.videoPublishedAt;
+        var channel = item.snippet.channelTitle;
         cacheVidResult(title, vidId, published, channel);
         //var watched = vidCache.find(function (index, id, t, w) {
         //  if (id == vidId) {
