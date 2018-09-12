@@ -45,7 +45,7 @@
         if (isAuthorized) {
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline');
-          $('#auth-status').html('Signed in as: ' + user.getId());
+          $('#auth-status').html('Signed in as: ' + user.BasicProfile.getName());
 
           requestSubscriptionList();
         } else {
@@ -207,7 +207,7 @@
           <button id="next-button" class="btn btn-secondary">Next</button>
         </div>
         <br>
-        <div class="col-lg-auto">
+        <div class="col-lg">
           <div id="videos" class="row"></div>
         </div>
       </div>
