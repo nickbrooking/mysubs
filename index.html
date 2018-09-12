@@ -45,7 +45,7 @@
         if (isAuthorized) {
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline');
-          $('#auth-status').html('Signed in as: ' + user);
+          $('#auth-status').html('Signed in as: ' + user.getId());
 
           requestSubscriptionList();
         } else {
@@ -103,7 +103,7 @@
         var thumbnail = snippet.thumbnails.default.url;
         $('#sub-container').append('<img src="' + thumbnail + '"/> ' +
           '<a href="https://www.youtube.com/channel/' + id + '">' + title + '</a>' +
-          '<div id="' + id + '" class="container"></div><br>');
+          '<div id="' + id + '" class="col"></div><br>');
         cacheSubResult(title, id);
         getChannelUploadsPlaylist(id);
       }
@@ -157,7 +157,7 @@
         //    return w;
         //  }
         //});
-        $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a><br>' + channel + '<br>' + published + '</div > ');
+        $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + vidId + '">' + title + '</a><br>' + channel + '<br>' + published + '</div >');
       }
 
       function cacheVidResult(title, id, published, channel) {
@@ -199,13 +199,14 @@
     <div id="main-content" class="container-fluid">
       <div class="row align-items-start">
         <div class="col-sm-auto">
-          <div id="sub-info" class="badge"></div>
+          <div id="sub-info"></div>
           <br>
-          <div id="sub-container" class="container"></div>
+          <div id="sub-container"></div>
           <br>
           <button id="prev-button" class="btn btn-secondary">Prev</button>
           <button id="next-button" class="btn btn-secondary">Next</button>
         </div>
+        <br>
         <div class="col-lg-auto">
           <div id="videos" class="row"></div>
         </div>
