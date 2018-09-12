@@ -45,7 +45,7 @@
         if (isAuthorized) {
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline');
-          $('#auth-status').html('Signed in as: ' + user.getBasicProfile().getName());
+          $('#auth-status').html(user.getBasicProfile().getName());
 
           requestSubscriptionList();
         } else {
@@ -181,7 +181,7 @@
       }
     </script>
   </head>
-  <body class="text-light bg-dark">
+  <body class="text-light bg-secondary">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">My Subs</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -189,11 +189,15 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <button id="sign-in-or-out-button" class="btn btn-sm">Sign In/Authorize</button>
-        <p>&nbsp;</p>
-        <button id="revoke-access-button" class="btn btn-sm">Revoke access</button>
-        <p>&nbsp;</p>
-        <span id="auth-status" class="navbar-text"></span>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status"></a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" id="sign-in-or-out-button">Sign In</a>
+              <a class="dropdown-item" id="revoke-access-button">Revoke Access</a>
+            </div>
+          </li>
+        </ul>
       </div>
     </nav>
     <div id="main-content" class="container-fluid">
