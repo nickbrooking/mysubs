@@ -78,7 +78,7 @@
         totalResults = response.result.pageInfo.totalResults;
         localStorage.setItem('totalsubs', totalResults);
 
-        $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.Length);
+        $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
 
         nextPageToken = response.result.nextPageToken;
         var nextVis = nextPageToken ? 'visible' : 'hidden';
