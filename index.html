@@ -45,7 +45,7 @@
         if (isAuthorized) {
           $('#sign-in-or-out-button').html('Sign out');
           $('#revoke-access-button').css('display', 'inline');
-          $('#auth-status').html('Signed in as: ' + user.BasicProfile.getName());
+          $('#auth-status').html('Signed in as: ' + user.getBasicProfile().getName());
 
           requestSubscriptionList();
         } else {
