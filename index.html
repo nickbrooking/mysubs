@@ -136,7 +136,7 @@
       var request = gapi.client.youtube.channels.list(requestOptions);
       request.execute(function (response) {
         var uploadId = "";
-        if (response.result) {
+        if (response.result && response.result.items.length > 0 || response.result.items[0].contentDetails) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
         }
         getPlaylistVideos(uploadId);
@@ -152,7 +152,7 @@
       var request = gapi.client.youtube.playlistItems.list(requestOptions);
       request.execute(function (response) {
         var videos = {};
-        if (response.result) {
+        if (response.result && response.result.items.length > 0) {
           videos = response.result.items;
         }
         $.each(videos, function (index, item) {
@@ -198,8 +198,8 @@
 
       if (vidCache) {
         vidCache.sort(sortByDate);
-        $.each(vidCache, function (index, video) {
-          if (!video.watched) {
+        $.each(vidCache, function (index, id, title, published, channel, watched) {
+          if (!watched) {
             $('#videos').append('<div class="col-2"><div class="checked-parent">' +
               '<div class="vid-img"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
               '<div class="checked-img"><img src="img/checked_32x32.png" onclick=markVidWatched(' + video.id + '); /></div></div>' +
