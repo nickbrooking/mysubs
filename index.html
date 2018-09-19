@@ -157,7 +157,7 @@
       var title = item.snippet.title;
       var id = item.contentDetails.videoId;
       var published = new Date(Date.parse(item.contentDetails.videoPublishedAt));
-      published = published.getFullYear() + '-' + published.getMonth() + '-' + published.getDate() + ' ' + published.getHours() + ':' + ("0" + published.getMinutes()).slice(-2);
+      published = published.getFullYear() + '-' + ("0" + published.getMonth()).slice(-2) + '-' + ("0" + published.getDate()).slice(-2) + ' ' + ("0" + published.getHours()).slice(-2) + ':' + ("0" + published.getMinutes()).slice(-2);
       var channel = item.snippet.channelTitle;
 
       if (!vidCache) {
