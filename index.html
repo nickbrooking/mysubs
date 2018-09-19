@@ -191,8 +191,8 @@
     }
 
     function markVidWatched(vidId) {
-      vidCache.find(function (index, id, title, published, channel, watched) {
-        if (id == vidId) {
+      vidCache.find(function (video, index) {
+        if (video.id == vidId) {
           vidCache[index].watched = "yes";
         }
       });
