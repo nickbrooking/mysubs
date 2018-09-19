@@ -1,3 +1,8 @@
+.checked-parent {
+    position: absolute;
+    z-index: 0;
+}
+
 .checked-img {
     position: absolute;
     z-index: 1;
