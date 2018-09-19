@@ -174,14 +174,16 @@
 
     function cacheVidResult(title, id, published, channel) {
       if (localStorage.getItem('videos')) {
-        //vidCache = localStorage.getItem('videos');
-      } else if (!vidCache) {
+        vidCache = localStorage.getItem('videos');
+      }
+
+      if (!vidCache) {
         vidCache = [{ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' }];
       } else if (!vidCache.some(obj => obj.id === id)) {
         vidCache.push({ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' });
       }
 
-      //localStorage.setItem('videos', JSON.stringify(vidCache));
+      localStorage.setItem('videos', JSON.stringify(vidCache));
     }
 
     function nextPage() {
@@ -193,13 +195,27 @@
     }
 
     function showCachedVideos() {
-      vidCache.sort(sortByDate);
-      $.each(vidCache, function (index, video) {
-        $('#videos').append('<div class="col-2"><div class="checked-parent">' + 
-          '<div class="vid-img"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
-          '<div class="checked-img"><img src="img/checked_32x32.png" onclick=watchVid(' + video.id + '); /></div></div>' +
-          '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleDateString("en-US") + '</div >');
+      if (vidCache) {
+        vidCache.sort(sortByDate);
+        $.each(vidCache, function (index, video) {
+          if (!video.watched) {
+            $('#videos').append('<div class="col-2"><div class="checked-parent">' +
+              '<div class="vid-img"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
+              '<div class="checked-img"><img src="img/checked_32x32.png" onclick=markVidWatched(' + video.id + '); /></div></div>' +
+              '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleString("en-US") + '</div >');
+          }
+        });
+      }
+    }
+
+    function markVidWatched(vidId) {
+      vidCache.find(function (index, id, title, published, channel, watched) {
+        if (id == vidId) {
+          vidCache[index].watched = true;
+        }
       });
+
+      localStorage.setItem('videos', JSON.stringify(vidCache));
     }
 
     function sortByDate(a, b) {
@@ -264,6 +280,6 @@
 <link rel="stylesheet" href="css/styles.css" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
 <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload=function(){};handleClientLoad()"
+        onload="this.onload = function () { }; handleClientLoad(); showCachedVideos();"
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
