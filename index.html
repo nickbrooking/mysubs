@@ -68,7 +68,7 @@
       var requestOptions = {
         mine: true,
         part: 'snippet',
-        maxResults: 25 
+        maxResults: 50 
       };
       if (pageToken) {
         requestOptions.pageToken = pageToken;
@@ -156,7 +156,7 @@
       var title = item.snippet.title;
       var vidId = item.contentDetails.videoId;
       var published = new Date(Date.parse(item.contentDetails.videoPublishedAt));
-      published = published.getFullYear() + '-' + published.getMonth() + '-' + published.getDate() + ' ' + published.getHours() + ':' + ("0" + published.getMinutes()).slice(-2);
+      //published = published.getFullYear() + '-' + published.getMonth() + '-' + published.getDate() + ' ' + published.getHours() + ':' + ("0" + published.getMinutes()).slice(-2);
       var channel = item.snippet.channelTitle;
       cacheVidResult(title, vidId, published, channel);
       //var watched = vidCache.find(function (index, id, t, w) {
@@ -187,7 +187,7 @@
     }
 
     function showCachedVideos() {
-      vidCache.sort(compare);
+      vidCache.sort(sortByDate);
       $.each(vidCache, function (index, video) {
         $('#videos').append('<div class="col-3"> + <img src="http://img.youtube.com/vi/' + video.id + '/0.jpg" class="img-responsive" />' +
           '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published + '</div >');
