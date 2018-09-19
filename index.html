@@ -28,7 +28,6 @@
         $('#next-button').click(function () { nextPage(); });
         loadFromStorage();
         requestSubscriptionList(true);
-      }).then(function () {
         showCachedVideos();
       });
     }
@@ -64,8 +63,6 @@
     }
 
     function requestSubscriptionList(fullCache, pageToken) {
-      $('#sub-container').html('');
-      $('#videos').html('');
       var requestOptions = {
         mine: true,
         part: 'snippet',
@@ -80,20 +77,13 @@
         localStorage.setItem('totalsubs', totalResults);
 
         nextPageToken = response.result.nextPageToken;
-        var nextVis = nextPageToken ? 'visible' : 'hidden';
-        $('#next-button').css('visibility', nextVis);
-        prevPageToken = response.result.prevPageToken
-        var prevVis = prevPageToken ? 'visible' : 'hidden';
-        $('#prev-button').css('visibility', prevVis);
 
         var subscriptionItems = response.result.items;
         if (subscriptionItems) {
           $.each(subscriptionItems, function (index, item) {
             displayAndCacheSubResult(item.snippet);
           });
-        } else {
-          $('#sub-container').html('Sorry you have no subscriptions');
-        }
+        } 
 
         $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
 
@@ -106,10 +96,6 @@
     function displayAndCacheSubResult(snippet) {
       var title = snippet.title;
       var id = snippet.resourceId.channelId;
-      var thumbnail = snippet.thumbnails.default.url;
-      $('#sub-container').append('<img src="' + thumbnail + '"/> ' +
-        '<a href="https://www.youtube.com/channel/' + id + '">' + title + '</a>' +
-        '<div id="' + id + '" class="col"></div><br>');
       cacheSubResult(title, id);
       getChannelUploadsPlaylist(id);
     }
@@ -152,7 +138,9 @@
           videos = response.result.items;
         }
         $.each(videos, function (index, item) {
-          cacheVidResult(item)
+          if (item.contentDetails) {
+            cacheVidResult(item);
+          }
         });
       });
     }
