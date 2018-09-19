@@ -5,6 +5,7 @@
   <script>
     var GoogleAuth;
     var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
+    var nextPageToken, prevPageToken, totalResults, subCache, vidCache;
 
     function handleClientLoad() {
       gapi.load('client:auth2', initClient);
@@ -25,6 +26,7 @@
         $('#revoke-access-button').click(function () { revokeAccess(); });
         $('#prev-button').click(function () { previousPage(); });
         $('#next-button').click(function () { nextPage(); });
+        loadFromStorage();
       });
     }
 
@@ -47,8 +49,6 @@
         $('#sign-in-or-out-button').html('Sign out');
         $('#revoke-access-button').css('display', 'inline');
         $('#auth-status').html(user.getBasicProfile().getName());
-
-        //requestSubscriptionList();
       } else {
         $('#sign-in-or-out-button').html('Sign In/Authorize');
         $('#revoke-access-button').css('display', 'none');
@@ -59,8 +59,6 @@
     function updateSigninStatus(isSignedIn) {
       setSigninStatus();
     }
-
-    var nextPageToken, prevPageToken, totalResults, subCache, vidCache;
 
     function requestSubscriptionList(fullCache, pageToken) {
       $('#sub-container').html('');
@@ -96,7 +94,6 @@
 
         $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
 
-        // Fill the cache
         if (nextPageToken && fullCache) {
           requestSubscriptionList(fullCache, nextPageToken);
         }
@@ -115,10 +112,6 @@
     }
 
     function cacheSubResult(title, id) {
-      if (localStorage.getItem('subscriptions')) {
-        subCache = JSON.parse(localStorage.getItem('subscriptions'));
-      }
-
       if (!subCache) {
         subCache = [{ 'id': id, 'title': title }];
       } else if (!subCache.some(obj => obj.id === id)) {
@@ -156,23 +149,16 @@
           videos = response.result.items;
         }
         $.each(videos, function (index, item) {
-          displayAndCacheVidResult(item)
+          cacheVidResult(item)
         });
       });
     }
 
-    function displayAndCacheVidResult(item) {
+    function cacheVidResult(item) {
       var title = item.snippet.title;
-      var vidId = item.contentDetails.videoId;
+      var id = item.contentDetails.videoId;
       var published = new Date(Date.parse(item.contentDetails.videoPublishedAt));
       var channel = item.snippet.channelTitle;
-      cacheVidResult(title, vidId, published, channel);
-    }
-
-    function cacheVidResult(title, id, published, channel) {
-      if (localStorage.getItem('videos')) {
-        vidCache = JSON.parse(localStorage.getItem('videos'));
-      }
 
       if (!vidCache) {
         vidCache = [{ 'id': id, 'title': title, 'published': published, 'channel': channel, 'watched': 'no' }];
@@ -192,18 +178,14 @@
     }
 
     function showCachedVideos() {
-      if (localStorage.getItem('videos')) {
-        vidCache = JSON.parse(localStorage.getItem('videos'));
-      }
-
       if (vidCache) {
         vidCache.sort(sortByDate);
-        $.each(vidCache, function (index, id, title, published, channel, watched) {
-          if (!watched) {
+        $.each(vidCache, function (index, video) {
+          if (video.watched != "no") {
             $('#videos').append('<div class="col-2"><div class="checked-parent">' +
               '<div class="vid-img"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
               '<div class="checked-img"><img src="img/checked_32x32.png" onclick=markVidWatched(' + video.id + '); /></div></div>' +
-              '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleString("en-US") + '</div >');
+              '<a href = "https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleString("en-US") + '</div >');
           }
         });
       }
@@ -225,6 +207,16 @@
 
     function sortByDate(a, b) {
       return b.published - a.published;
+    }
+
+    function loadFromStorage() {
+      if (localStorage.getItem('subscriptions')) {
+        subCache = JSON.parse(localStorage.getItem('subscriptions'));
+      }
+
+      if (localStorage.getItem('videos')) {
+        vidCache = JSON.parse(localStorage.getItem('videos'));
+      }
     }
   </script>
 </head>
