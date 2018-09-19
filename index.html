@@ -28,6 +28,7 @@
         $('#next-button').click(function () { nextPage(); });
         loadFromStorage();
         requestSubscriptionList(true);
+      }).then(function () {
         showCachedVideos();
       });
     }
@@ -209,7 +210,9 @@
     }
 
     function sortByDate(a, b) {
-      return new Date(b.published).getTime() - new Date(a.published).getTime();
+      a = new Date(a.published).getTime();
+      b = new Date(b.published).getTime();
+      return b - a;
     }
 
     function loadFromStorage() {
