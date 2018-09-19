@@ -178,6 +178,8 @@
     }
 
     function showCachedVideos() {
+      $('#videos').html('');
+
       if (vidCache) {
         vidCache.sort(sortByDate);
         $.each(vidCache, function (index, video) {
@@ -231,7 +233,7 @@
           <div id="sub-info"></div>
         </li>
         <li class="nav-item">
-          <button class="btn btn-outline-light mx-2" onclick="requestSubscriptionList(true);">Cache all subs</button>
+          <button class="btn btn-outline-light mx-2" onclick="requestSubscriptionList(true);">Cache subs/videos</button>
         </li>
         <li class="nav-item">
           <button class="btn btn-outline-light mx-2" onclick="showCachedVideos();">Display Cached Videos</button>
@@ -250,21 +252,7 @@
   </nav>
 
   <div id="main-content" class="container-fluid">
-    <div class="row align-items-start">
-      <!--
-      <div class="col-sm-auto">
-        <br>
-        <button id="prev-button" class="btn btn-secondary">Prev</button>
-        <button id="next-button" class="btn btn-secondary">Next</button>
-        <br>
-        <div id="sub-container"></div>
-      </div>
-      <br>
-      -->
-      <div class="col-lg">
-        <div id="videos" class="row"></div>
-      </div>
-    </div>
+    <div id="videos" class="row align-items-start"></div>
   </div>
 </body>
 </html>
