@@ -204,7 +204,7 @@
     }
 
     function sortByDate(a, b) {
-      return b.published - a.published;
+      return new Date(b.published).getTime() - new Date(a.published).getTime();
     }
 
     function loadFromStorage() {
