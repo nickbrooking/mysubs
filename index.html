@@ -132,7 +132,10 @@
       };
       var request = gapi.client.youtube.channels.list(requestOptions);
       request.execute(function (response) {
-        var uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
+        var uploadId = "";
+        if (response.result.items[0].contentDetails) {
+          uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
+        }
         getPlaylistVideos(uploadId);
       });
     }
@@ -189,7 +192,7 @@
     function showCachedVideos() {
       vidCache.sort(sortByDate);
       $.each(vidCache, function (index, video) {
-        $('#videos').append('<div class="col-1"><img src="https://img.youtube.com/vi/' + video.id + '/0.jpg" class="img-responsive" />' +
+        $('#videos').append('<div class="col-2"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
           '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published + '</div >');
       });
     }
