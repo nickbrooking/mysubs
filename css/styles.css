@@ -1,5 +1,6 @@
 .checked-parent {
     position: relative;
+    height: 150px;
     z-index: 0;
 }
 
