@@ -133,7 +133,7 @@
       var request = gapi.client.youtube.channels.list(requestOptions);
       request.execute(function (response) {
         var uploadId = "";
-        if (response.result.items[0]) {
+        if (response.result) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
         }
         getPlaylistVideos(uploadId);
@@ -148,7 +148,10 @@
       };
       var request = gapi.client.youtube.playlistItems.list(requestOptions);
       request.execute(function (response) {
-        var videos = response.result.items;
+        var videos = {};
+        if (response.result) {
+          videos = response.result.items;
+        }
         $.each(videos, function (index, item) {
           displayAndCacheVidResult(item)
         });
@@ -193,7 +196,7 @@
       vidCache.sort(sortByDate);
       $.each(vidCache, function (index, video) {
         $('#videos').append('<div class="col-2"><div class="checked-parent">' + 
-          '<div class="vid-img">< img src = "https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class= "img-fluid" /></div>' +
+          '<div class="vid-img"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
           '<div class="checked-img"><img src="img/checked_32x32.png" /></div></div>' +
           '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleDateString("en-US") + '</div >');
       });
