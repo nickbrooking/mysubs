@@ -1,5 +1,10 @@
-.checked-img {
-    z-index: 1;
-    margin-top: -36px;
-    cursor: pointer;
+body {
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: small;
+}
+
+a {
+    color: white;
+    font-size: medium;
 }
