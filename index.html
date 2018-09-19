@@ -26,7 +26,6 @@
         $('#revoke-access-button').click(function () { revokeAccess(); });
         $('#prev-button').click(function () { previousPage(); });
         $('#next-button').click(function () { nextPage(); });
-        loadFromStorage();
       });
     }
 
@@ -182,9 +181,8 @@
         vidCache.sort(sortByDate);
         $.each(vidCache, function (index, video) {
           if (video.watched == "no") {
-            $('#videos').append('<div class="col-2"><div class="checked-parent">' +
-              '<div class="vid-img"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
-              '<div class="checked-img"><img src="img/checked_32x32.png" onclick=markVidWatched(' + video.id + '); /></div></div>' +
+            $('#videos').append('<div class="col-2 collapse" id="'+ video.id + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
+              '<a href="#" data-toggle="collapse" href="#' + video.id + '"><img src="img/checked_32x32.png" onclick=markVidWatched(' + video.id + '); /></a>' +
               '<a href = "https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleString("en-US") + '</div >');
           }
         });
@@ -198,7 +196,7 @@
 
       vidCache.find(function (index, id, title, published, channel, watched) {
         if (id == vidId) {
-          vidCache[index].watched = true;
+          vidCache[index].watched = "yes";
         }
       });
 
@@ -277,6 +275,6 @@
 <link rel="stylesheet" href="css/styles.css" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
 <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload = function () { }; handleClientLoad(); showCachedVideos();"
+        onload="this.onload = function () { }; handleClientLoad(); loadFromStorage(); showCachedVideos();"
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
