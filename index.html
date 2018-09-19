@@ -133,7 +133,7 @@
       var request = gapi.client.youtube.channels.list(requestOptions);
       request.execute(function (response) {
         var uploadId = "";
-        if (response.result.items[0].contentDetails) {
+        if (response.result.items[0]) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
         }
         getPlaylistVideos(uploadId);
@@ -192,8 +192,9 @@
     function showCachedVideos() {
       vidCache.sort(sortByDate);
       $.each(vidCache, function (index, video) {
-        $('#videos').append('<div class="col-2"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
-          '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published + '</div >');
+        $('#videos').append('<div class="col-2"><div><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
+          '<img src="img/checked_32x32.png" class="checked-img" /></div>' +
+          '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published.toLocaleDateString("en-US") + '</div >');
       });
     }
 
