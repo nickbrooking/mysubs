@@ -189,7 +189,7 @@
     function showCachedVideos() {
       vidCache.sort(sortByDate);
       $.each(vidCache, function (index, video) {
-        $('#videos').append('<div class="col-3"> + <img src="http://img.youtube.com/vi/' + video.id + '/0.jpg" class="img-responsive" />' +
+        $('#videos').append('<div class="col-1"><img src="https://img.youtube.com/vi/' + video.id + '/0.jpg" class="img-responsive" />' +
           '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published + '</div >');
       });
     }
