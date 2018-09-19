@@ -188,7 +188,8 @@
 
     function showCachedVideos() {
       $.each(vidCache, function (index, video) {
-        $('#videos').append('<div class="col-4"><a href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a><br>' + video.channel + '<br>' + video.published + '</div >');
+        $('#videos').append('<div class="col-3"> + <img src="http://img.youtube.com/vi/' + video.id + '/0.jpg" />' +
+          '<a href = "https://www.youtube.com/watch?v=' + video.id + '" > ' + video.title + '</a > <br>' + video.channel + '<br>' + video.published + '</div >');
       });
     }
   </script>
