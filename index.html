@@ -233,10 +233,10 @@
           <div id="sub-info"></div>
         </li>
         <li class="nav-item">
-          <button class="btn btn-outline-light mx-2" onclick="requestSubscriptionList(true);">Cache subs/videos</button>
+          <button class="btn btn-outline-light mx-2" onclick="requestSubscriptionList(true);">Manually Cache Subs/Videos</button>
         </li>
         <li class="nav-item">
-          <button class="btn btn-outline-light mx-2" onclick="showCachedVideos();">Display Cached Videos</button>
+          <button class="btn btn-outline-light mx-2" onclick="showCachedVideos();">Manually Display Cached Videos</button>
         </li>
       </ul>
       <ul class="navbar-nav">
@@ -263,6 +263,6 @@
 <link rel="stylesheet" href="css/styles.css" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
 <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload = function () { }; handleClientLoad(); loadFromStorage(); showCachedVideos();"
+        onload="this.onload = function () { }; handleClientLoad(); loadFromStorage(); requestSubscriptionList(true); showCachedVideos();"
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
