@@ -121,7 +121,9 @@
         if (response.result && response.result.items.length > 0 && response.result.items[0].contentDetails) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
         }
-        getPlaylistVideos(uploadId);
+        if (uploadId) {
+          getPlaylistVideos(uploadId);
+        }
       });
     }
 
