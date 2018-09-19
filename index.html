@@ -179,9 +179,9 @@
         $.each(vidCache, function (index, video) {
           if (video.watched == "no") {
             $('#videos').append('<div class="col-2" id="'+ video.id + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
-              '<a href="#" onclick=\'markVidWatched("' + video.id + '");\'><img src="img/checked_32x32.png" /></a>' +
+              '<div class="watchedbutton"><a href="#" onclick=\'markVidWatched("' + video.id + '");\'><img src="img/checked_32x32.png" /></a></div><br>' +
               //'<a data-toggle="collapse" href="#' + video.id + '"><img src="img/checked_32x32.png" /></a>' +
-              '<a class="videolink" href="https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a><br>' +
+              '<div class="videotitle"><a class="videolink" href="https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a></div><br>' +
               '<div class="videochannel">' + video.channel + '</div><br><div class="videodate">' + video.published + '</div></div >');
           }
         });

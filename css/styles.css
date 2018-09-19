@@ -4,6 +4,10 @@
     font-size: small;
 }
 
+.videolink:hover {
+    text-decoration: underline;
+}
+
 .videochannel {
     color: white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -14,4 +18,8 @@
     color: white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: x-small;
+}
+
+.watchedbutton {
+    margin-top: -36px;
 }
