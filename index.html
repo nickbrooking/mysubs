@@ -191,10 +191,6 @@
     }
 
     function markVidWatched(vidId) {
-      if (localStorage.getItem('videos')) {
-        vidCache = JSON.parse(localStorage.getItem('videos'));
-      }
-
       vidCache.find(function (index, id, title, published, channel, watched) {
         if (id == vidId) {
           vidCache[index].watched = "yes";
