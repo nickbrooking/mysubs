@@ -220,14 +220,14 @@
 
       showWatched = false;
       if (localStorage.getItem('showWatched')) {
-        showWatched = localStorage.getItem('showWatched');
+        showWatched = (localStorage.getItem('showWatched') == 'yes') ? true : false;
         $('#showWatched').checked = showWatched;
       }
     }
 
     function updateShowWatched() {
       showWatched = $('#showwatched').checked;
-      localStorage.setItem('showWatched', showWatched);
+      localStorage.setItem('showWatched', showWatched ? 'yes' : 'no');
     }
   </script>
 </head>
