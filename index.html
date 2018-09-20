@@ -221,7 +221,7 @@
       showWatched = "no";
       if (localStorage.getItem('showWatched')) {
         showWatched = localStorage.getItem('showWatched');
-        $('#showWatchedCheckbox').prop('checked') = (showWatched == "yes") ? true : false;
+        $('#showWatchedCheckbox').prop('checked', (showWatched == "yes") ? true : false);
       }
     }
 
