@@ -151,7 +151,7 @@
       var title = item.snippet.title;
       var id = item.contentDetails.videoId;
       var published = new Date(Date.parse(item.contentDetails.videoPublishedAt));
-      published = published.getFullYear() + '-' + ("0" + published.getMonth()).slice(-2) + '-' + ("0" + published.getDate()).slice(-2) + ' ' + ("0" + published.getHours()).slice(-2) + ':' + ("0" + published.getMinutes()).slice(-2);
+      published = published.getFullYear() + '-' + ("0" + (published.getMonth()+1)).slice(-2) + '-' + ("0" + published.getDate()).slice(-2) + ' ' + ("0" + published.getHours()).slice(-2) + ':' + ("0" + published.getMinutes()).slice(-2);
       var channel = item.snippet.channelTitle;
 
       if (!vidCache) {
@@ -181,7 +181,7 @@
             $('#videos').append('<div class="col-2" id="'+ video.id + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
               '<div class="watchedbutton"><a href="#" onclick=\'markVidWatched("' + video.id + '");\'><img src="img/checked_32x32.png" /></a></div>' +
               '<div class="videotitle"><a class="videolink" href="https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a></div>' +
-              '<div class="videochannel">' + video.channel + '</div><div class="videodate"><time class="timeago" datetime="' + new Date(video.published) + '">' + video.published + '</time ></div ></div > ');
+              '<div class="videochannel">' + video.channel + '</div><div class="videodate"><time class="timeago" datetime="' + video.published + '" title="' + video.published + '" /></time ></div ></div > ');
           }
         });
       }
@@ -260,11 +260,6 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
 <link rel="stylesheet" href="css/styles.css" />
 <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload = function () { }; handleClientLoad(); "
+        onload="this.onload = function () { }; handleClientLoad(); jQuery('time.timeago').timeago(); "
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
-</script>
-<script type="text/javascript">
-  jQuery(document).ready(function () {
-    jQuery("time.timeago").timeago();
-  });
 </script>
