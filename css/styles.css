@@ -1,6 +1,6 @@
 .videolink {
     color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: Arial;
     font-size: small;
 }
 
@@ -10,14 +10,14 @@
 }
 
 .videochannel {
-    color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: grey;
+    font-family: Arial;
     font-size: smaller;
 }
 
 .videodate {
-    color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: grey;
+    font-family: Arial;
     font-size: x-small;
 }
 

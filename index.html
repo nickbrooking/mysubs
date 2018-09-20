@@ -179,12 +179,14 @@
         $.each(vidCache, function (index, video) {
           if (video.watched == "no") {
             $('#videos').append('<div class="col-2" id="'+ video.id + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
-              '<div class="watchedbutton"><a href="#" onclick=\'markVidWatched("' + video.id + '");\'><img src="img/checked_32x32.png" /></a></div>' +
+              '<div class="watchedbutton"><a href="#" onclick=\'markVidWatched("' + video.id + '");\' title="Mark Watched"><img src="img/checked_32x32.png" /></a></div>' +
               '<div class="videotitle"><a class="videolink" href="https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a></div>' +
               '<div class="videochannel">' + video.channel + '</div><div class="videodate"><time class="timeago" datetime="' + video.published + '" title="' + video.published + '" /></time ></div ></div > ');
           }
         });
       }
+
+      jQuery('time.timeago').timeago();
     }
 
     function markVidWatched(vidId) {
@@ -260,6 +262,6 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
 <link rel="stylesheet" href="css/styles.css" />
 <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload = function () { }; handleClientLoad(); jQuery('time.timeago').timeago(); "
+        onload="this.onload = function () { }; handleClientLoad(); "
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
