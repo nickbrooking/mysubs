@@ -178,7 +178,7 @@
         vidCache.sort(sortByDate);
         $.each(vidCache, function (index, video) {
           if (video.watched == "no") {
-            $('#videos').append('<div class="col-2" id="'+ video.id + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" />' +
+            $('#videos').append('<div class="col-2" id="'+ video.id + '"><div class="videothumbnail"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
               '<div class="watchedbutton"><a href="#" onclick=\'markVidWatched("' + video.id + '");\' title="Mark Watched"><img src="img/checked_32x32.png" /></a></div>' +
               '<div class="videotitle"><a class="videolink" href="https://www.youtube.com/watch?v=' + video.id + '"> ' + video.title + '</a></div>' +
               '<div class="videochannel">' + video.channel + '</div><div class="videodate"><time class="timeago" datetime="' + video.published + '" title="' + video.published + '" /></time ></div ></div > ');
