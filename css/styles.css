@@ -18,7 +18,7 @@
 }
 
 .videochannel {
-    color: grey;
+    color: darkgrey ;
     font-family: Arial;
     font-size: smaller;
 }
@@ -32,6 +32,10 @@
 .watchedbutton {
     display: none;
     margin-top: -32px;
+}
+
+.showWatched {
+    opacity: 0.7;
 }
 
 .videothumbnail:hover + .watchedbutton, .watchedbutton:hover {
