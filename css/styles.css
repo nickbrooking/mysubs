@@ -34,6 +34,6 @@
     margin-top: -32px;
 }
 
-.watchedbutton:hover + .videothumbnail:hover {
+.videothumbnail:hover + .watchedbutton {
     display:block;
 }
