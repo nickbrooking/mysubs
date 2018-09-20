@@ -29,11 +29,11 @@
     font-size: x-small;
 }
 
-.watchedbutton + .videothumbnail:hover {
-    display:block;
+.watchedbutton {
+    display: none;
+    margin-top: -32px;
 }
 
-.watchedbutton {
-    display:none;
-    margin-top: -32px;
+.watchedbutton:hover + .videothumbnail:hover {
+    display:block;
 }
