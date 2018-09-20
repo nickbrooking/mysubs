@@ -176,9 +176,9 @@
 
       if (vidCache) {
         vidCache.sort(sortByDate);
-        var watchedClass = showWatched ? " showWatched" : "";
+        var watchedClass = (showWatched == "yes") ? " showWatched" : "";
         $.each(vidCache, function (index, video) {
-          if ((video.watched == "no" && showWatched==false) || showWatched == true) {
+          if ((video.watched == "no" && showWatched == "no") || showWatched == "yes") {
             $('#videos').append('<div class="col-2" id="' + video.id + '"><div class="videothumbnail' + watchedClass + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
               '<div class="watchedbutton"><a href="#" onclick=\'markVidWatched("' + video.id + '");\' data-toggle="tooltip" data-placement="top" title="Mark Watched"><img src="img/checked_32x32.png" /></a></div>' +
               '<div class="videotitle"><a class="videolink" href="https://www.youtube.com/watch?v=' + video.id + '" data-toggle="tooltip" data-placement="top" title="' + video.title + '"> ' + video.title + '</a></div>' +
@@ -218,16 +218,16 @@
         vidCache = JSON.parse(localStorage.getItem('videos'));
       }
 
-      showWatched = false;
+      showWatched = "no";
       if (localStorage.getItem('showWatched')) {
-        showWatched = (localStorage.getItem('showWatched') == 'yes') ? true : false;
-        $('#showWatched').checked = showWatched;
+        showWatched = localStorage.getItem('showWatched');
+        $('#showWatched').checked = (showWatched == "yes") ? true : false;
       }
     }
 
     function updateShowWatched() {
-      showWatched = $('#showwatched').checked;
-      localStorage.setItem('showWatched', showWatched ? 'yes' : 'no');
+      showWatched = ($('#showwatched').checked) ? "yes" : "no";
+      localStorage.setItem('showWatched', showWatched);
     }
   </script>
 </head>
