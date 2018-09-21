@@ -56,6 +56,7 @@
     border-style: solid;
     border-color: rgba(0,0,0,1) transparent transparent transparent;
     z-index: 100;
+    opacity: 0;
 }
 
 [tooltip]::after {
@@ -68,7 +69,8 @@
     text-align: center;
     color: #fff;
     font-size: 12px;
-    min-width: 80px;
+    width: 75%;
+    min-width: 100px;
     border-radius: 5px;
     pointer-events: none;
     padding: 4px 4px;
