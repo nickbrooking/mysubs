@@ -22,10 +22,6 @@
         GoogleAuth.isSignedIn.listen(updateSigninStatus);
         var user = GoogleAuth.currentUser.get();
         setSigninStatus();
-        $('#sign-in-or-out-button').click(function () { handleAuthClick(); });
-        $('#revoke-access-button').click(function () { revokeAccess(); });
-        $('#prev-button').click(function () { previousPage(); });
-        $('#next-button').click(function () { nextPage(); });
         loadFromStorage();
         requestSubscriptionList(true);
         showCachedVideos();
@@ -244,25 +240,34 @@
           <div id="sub-info"></div>
         </li>
         <li class="nav-item">
-          <button class="btn btn-outline-light mx-2" onclick="requestSubscriptionList(true);">Manually Cache Subs/Videos</button>
+          <button class="btn btn-outline-light m-2" onclick="requestSubscriptionList(true);">Manually Cache Subs/Videos</button>
         </li>
         <li class="nav-item">
-          <button class="btn btn-outline-light mx-2" onclick="showCachedVideos();">Manually Display Cached Videos</button>
+          <button class="btn btn-outline-light m-2" onclick="showCachedVideos();">Manually Display Cached Videos</button>
         </li>
         <li class="nav-item">
-          <button class="btn btn-outline-light mx-2" onclick="markAllVidsWatched();">Mark All Videos Watched</button>
-        </li>
-        <li class="nav-item showWatchedInput">
-          <input id="showWatched" class="form-check-input" type="checkbox" value="showWatched" onclick="updateShowWatched();" />
-          <label class="form-check-label" for="showWatched">Show Watched Videos</label>
+          <div class="btn btn-outline-light m-2">
+            <input id="showWatched" class="form-check-input ml-0 mt-1.5" type="checkbox" value="showWatched" onclick="updateShowWatched();" />
+            <label class="form-check-label ml-3" for="showWatched">Show Watched Videos</label>
+          </div>
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item dropdown">
-          <button class="btn btn-outline-light mx-2 dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</button>
+        <li class="nav-item markwatched-dropdown">
+          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="markwatched-dropdown" id="markWatchedButton" role="button" aria-haspopup="true" aria-expanded="false">Mark Videos Watched</button>
+          <div class="dropdown-menu" aria-labelledby="markwatchedButton">
+            <a class="dropdown-item" id="mark-all-watched-button" href="#" onclick="markVidsWatched();">Mark All Watched</a>
+            <a class="dropdown-item" id="mark-older-than-week-watched-button" href="#" onclick="markVidsWatched(7);">Mark Older than a Week Watched</a>
+            <a class="dropdown-item" id="mark-older-than-month-watched-button" href="#" onclick="markVidsWatched(30);">Mark Older than a Month Watched</a>
+          </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item signin-dropdown">
+          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="signin-dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</button>
           <div class="dropdown-menu" aria-labelledby="auth-status">
-            <a class="dropdown-item" id="sign-in-or-out-button" href="#">Sign In</a>
-            <a class="dropdown-item" id="revoke-access-button" href="#">Revoke Access</a>
+            <a class="dropdown-item" id="sign-in-or-out-button" href="#" onclick="handleAuthClick();">Sign In</a>
+            <a class="dropdown-item" id="revoke-access-button" href="#" onclick="revokeAccess();">Revoke Access</a>
           </div>
         </li>
       </ul>
