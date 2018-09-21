@@ -1,10 +1,14 @@
+.videoblock {
+    max-width: 320px;
+}
+
 .videolink {
     color: white;
     font-family: Arial;
     font-size: small;
 
     /* Cut off title after two lines
-        in some browsers */
+       in *some* browsers */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -75,6 +79,10 @@
     pointer-events: none;
     padding: 4px 4px;
     opacity: 0;
+}
+
+.watchedbutton [tooltip]::after {
+    left: 130%;
 }
 
 [tooltip]:hover::after, [tooltip]:hover::before {
