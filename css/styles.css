@@ -35,14 +35,11 @@
 }
 
 .showWatchedInput {
-    margin-top: 32px;
+    margin-top: 10px;
     margin-left: 32px;
 }
 
-.showWatched {
-    opacity: 0.7;
-}
-
 .videothumbnail:hover + .watchedbutton, .watchedbutton:hover {
+    opacity:0.8;
     display:block;
 }
