@@ -199,6 +199,24 @@
       localStorage.setItem('videos', JSON.stringify(vidCache));
     }
 
+    function markVidsWatched(numDays) {
+      var targetTime = new Date().getTime() - (numDays * 24 * 60 * 60 * 1000);
+      if (vidCache) {
+        $.each(vidCache, function (index, video) {
+          if (!numDays) {
+            vidCache[index].watched = true;
+          } else {
+            var vidTime = new Date(video.published).getTime();
+            if (vidTime <= targetTime) {
+              vidCache[index].watched = true;
+            }
+          }
+        });
+      }
+
+      showCachedVideos();
+    }
+
     function sortByDate(a, b) {
       a = new Date(a.published).getTime();
       b = new Date(b.published).getTime();
@@ -247,14 +265,14 @@
         </li>
         <li class="nav-item">
           <div class="btn btn-outline-light m-2">
-            <input id="showWatched" class="form-check-input ml-0 mt-1.5" type="checkbox" onclick="updateShowWatched();" />
+            <input id="showWatched" class="form-check-input ml-0 mt-1.5" type="checkbox" onclick="updateShowWatched(this);" />
             <label class="form-check-label ml-3" for="showWatched">Show Watched Videos</label>
           </div>
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item markwatched-dropdown">
-          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="markwatched-dropdown" id="markWatchedButton" role="button" aria-haspopup="true" aria-expanded="false">Mark Videos Watched</button>
+        <li class="nav-item dropdown">
+          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="dropdown" id="markWatchedButton" role="button" aria-haspopup="true" aria-expanded="false">Mark Videos Watched</button>
           <div class="dropdown-menu" aria-labelledby="markwatchedButton">
             <a class="dropdown-item" id="mark-all-watched-button" href="#" onclick="markVidsWatched();">Mark All Watched</a>
             <a class="dropdown-item" id="mark-older-than-week-watched-button" href="#" onclick="markVidsWatched(7);">Mark Older than a Week Watched</a>
@@ -263,8 +281,8 @@
         </li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item signin-dropdown">
-          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="signin-dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</button>
+        <li class="nav-item dropdown">
+          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</button>
           <div class="dropdown-menu" aria-labelledby="auth-status">
             <a class="dropdown-item" id="sign-in-or-out-button" href="#" onclick="handleAuthClick();">Sign In</a>
             <a class="dropdown-item" id="revoke-access-button" href="#" onclick="revokeAccess();">Revoke Access</a>
