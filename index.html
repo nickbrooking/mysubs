@@ -183,7 +183,12 @@
         });
       }
 
-      $('[data-toggle="tooltip"]').tooltip({ offset: 2 });
+      $('[data-toggle="tooltip"]').tooltip({
+        modifiers: {
+          offset: { offset: '0,5' },
+          keepTogether: { enabled: false }
+        }
+      });
       jQuery('time.timeago').timeago();
     }
 

@@ -33,6 +33,7 @@
     display: none;
     margin-top: -34px;
     margin-left: 2px;
+    padding-bottom: 2px;
 }
 
 .videothumbnail:hover + .watchedbutton, .watchedbutton:hover {
