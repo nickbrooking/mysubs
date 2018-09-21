@@ -31,12 +31,8 @@
 
 .watchedbutton {
     display: none;
-    margin-top: -32px;
-}
-
-.showWatchedInput {
-    margin-top: 10px;
-    margin-left: 32px;
+    margin-top: -34px;
+    margin-left: 2px;
 }
 
 .videothumbnail:hover + .watchedbutton, .watchedbutton:hover {
