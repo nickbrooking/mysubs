@@ -277,6 +277,7 @@
     function updateShowWatched(checkbox) {
       showWatched = (checkbox.checked) ? "yes" : "no";
       localStorage.setItem('showWatched', showWatched);
+      showCachedVideos();
     }
   </script>
 </head>
