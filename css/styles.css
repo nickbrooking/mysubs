@@ -1,3 +1,7 @@
+.watched {
+    opacity: 0.5;
+}
+
 .videoblock {
     max-width: 320px;
 }
@@ -87,4 +91,9 @@
 
 [tooltip]:hover::after, [tooltip]:hover::before {
     opacity: 1;
+}
+
+.videothumbnail > [tooltip], .videothumbnail > [tooltip]::before, .videothumbnail > [tooltip]::after {
+    opacity: 1;
+    top: 50%;
 }

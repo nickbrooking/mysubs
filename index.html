@@ -23,8 +23,9 @@
         var user = GoogleAuth.currentUser.get();
         setSigninStatus();
         loadFromStorage();
-        requestSubscriptionList(true);
-        showCachedVideos();
+        $.when(requestSubscriptionList(true)).then(function () {
+          showCachedVideos();
+        });
       });
     }
 
@@ -172,13 +173,26 @@
 
       if (vidCache) {
         vidCache.sort(sortByDate);
-        var watchedClass = (showWatched == "yes") ? " showWatched" : "";
+        var watchedClass = "";
+        var watchedButtonTooltip = "Mark Watched";
+        var watchedTooltip = "";
+        var watchedButtonImage = "checked";
+        var watchedVidFunction = "markVidWatched";
         $.each(vidCache, function (index, video) {
           if ((video.watched == "no" && showWatched == "no") || showWatched == "yes") {
+            if (showWatched == "yes" && video.watched == "yes") {
+              watchedClass = " watched";
+            }
+            if (video.watched == "yes") {
+              watchedButtonTooltip = "Mark Unwatched";
+              watchedButtonImage = "cancel";
+              watchedVidFunction = "markVidUnwatched";
+              watchedTooltip = " tooltip=\'Watched\'";
+            }
             $('#videos').append(
               '<div class="p-2 videoblock" id="' + video.id + '">' +
-              '<div class="videothumbnail' + watchedClass + '"><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div>' +
-              '<div class="watchedbutton"><a href="javascript:void(0)" tooltip="Mark Watched" onclick=\'markVidWatched("' + video.id + '");\'><img src="img/checked_32x32.png" /></a></div>' +
+              '<div class="videothumbnail' + watchedClass + '"><div class="videowatched"' + watchedTooltip + '><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div></div>' +
+              '<div class="watchedbutton"><a href="javascript:void(0)" tooltip="' + watchedButtonTooltip + '" onclick=\'' + watchedVidFunction + '("' + video.id + '");\'><img src="img/' + watchedButtonImage + '_32x32.png" /></a></div>' +
               '<div class="videotitle" tooltip="' + video.title + '"><a target="_blank" rel="noopener noreferrer" class="videolink" onauxclick=\'markVidWatched("' + video.id + '");\' onclick=\'markVidWatched("' + video.id + '");\' href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a></div>' +
               '<div class="videochannel">' + video.channel + '</div>' +
               '<div class="videodate"><time class="timeago" datetime="' + video.published + '" tooltip="' + video.published + '"/></div>' +
@@ -197,7 +211,25 @@
         }
       });
 
-      $('#' + vidId).css('display', 'none');
+      if (showWatched == "no") {
+        $('#' + vidId).css('display', 'none');
+      } else {
+        $('#' + vidId).children('.videothumbnail').css.addClass('watched');
+        $('#' + vidId).children('.videothumbnail').children('videowatched').attr('tooltip', 'Watched');
+      }
+
+      localStorage.setItem('videos', JSON.stringify(vidCache));
+    }
+
+    function markVidUnwatched(vidId) {
+      vidCache.find(function (video, index) {
+        if (video.id == vidId) {
+          vidCache[index.watched] = "no";
+        }
+      });
+
+      $('#' + vidId).children('.videothumbnail').css.removeClass('watched');
+      $('#' + vidId).children('.videothumbnail').children('videowatched').removeAttr('tooltip');
 
       localStorage.setItem('videos', JSON.stringify(vidCache));
     }
