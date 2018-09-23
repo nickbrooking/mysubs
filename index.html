@@ -213,10 +213,10 @@
 
       if (showWatched == "no") {
         $('#' + vidId).css('display', 'none');
-      } else {
-        $('#' + vidId).children('.videothumbnail').addClass('watched');
-        $('#' + vidId).children('.videothumbnail').children('videowatched').attr('tooltip', 'Watched');
       }
+
+      $('#' + vidId).children('.videothumbnail').addClass('watched');
+      $('#' + vidId).children('.videothumbnail').children('videowatched').attr('tooltip', 'Watched');
 
       localStorage.setItem('videos', JSON.stringify(vidCache));
     }
@@ -224,7 +224,7 @@
     function markVidUnwatched(vidId) {
       vidCache.find(function (video, index) {
         if (video.id == vidId) {
-          vidCache[index.watched] = "no";
+          vidCache[index].watched = "no";
         }
       });
 
