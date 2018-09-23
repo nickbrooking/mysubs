@@ -214,7 +214,7 @@
       if (showWatched == "no") {
         $('#' + vidId).css('display', 'none');
       } else {
-        $('#' + vidId).children('.videothumbnail').css.addClass('watched');
+        $('#' + vidId).children('.videothumbnail').addClass('watched');
         $('#' + vidId).children('.videothumbnail').children('videowatched').attr('tooltip', 'Watched');
       }
 
@@ -228,7 +228,7 @@
         }
       });
 
-      $('#' + vidId).children('.videothumbnail').css.removeClass('watched');
+      $('#' + vidId).children('.videothumbnail').removeClass('watched');
       $('#' + vidId).children('.videothumbnail').children('videowatched').removeAttr('tooltip');
 
       localStorage.setItem('videos', JSON.stringify(vidCache));
