@@ -5,7 +5,8 @@
   <script>
     var GoogleAuth;
     var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
-    var nextPageToken, prevPageToken, totalResults, subCache, vidCache, showWatched;
+    var nextPageToken, prevPageToken, totalResults, subCache, vidCache, showWatched,
+      watchedClass, watchedButtonTooltip, watchedTooltip, watchedButtonImage, watchedVidFunction;
 
     function handleClientLoad() {
       gapi.load('client:auth2', initClient);
@@ -168,35 +169,34 @@
       requestSubscriptionList(false, prevPageToken);
     }
 
+    function setupWatchedInfo(watched) {
+      if (showWatched == "yes" && watched == "yes") {
+        watchedClass = " watched";
+      } else {
+        watchedClass = "";
+      }
+      if (watched == "yes") {
+        watchedButtonTooltip = "Mark Unwatched";
+        watchedButtonImage = "cancel";
+        watchedVidFunction = "markVidUnwatched";
+        watchedTooltip = " tooltip=\'Watched\'";
+      } else {
+        watchedButtonTooltip = "Mark Watched";
+        watchedTooltip = "";
+        watchedButtonImage = "checked";
+        watchedVidFunction = "markVidWatched";
+      }
+    }
+
     function showCachedVideos() {
       $('#videos').html('');
 
       if (vidCache) {
         vidCache.sort(sortByDate);
-        var watchedClass = "";
-        var watchedButtonTooltip = "Mark Watched";
-        var watchedTooltip = "";
-        var watchedButtonImage = "checked";
-        var watchedVidFunction = "markVidWatched";
         $.each(vidCache, function (index, video) {
           if ((video.watched == "no" && showWatched == "no") || showWatched == "yes") {
-            if (showWatched == "yes" && video.watched == "yes") {
-              watchedClass = " watched";
-            }
-            if (video.watched == "yes") {
-              watchedButtonTooltip = "Mark Unwatched";
-              watchedButtonImage = "cancel";
-              watchedVidFunction = "markVidUnwatched";
-              watchedTooltip = " tooltip=\'Watched\'";
-            }
-            $('#videos').append(
-              '<div class="p-2 videoblock" id="' + video.id + '">' +
-              '<div class="videothumbnail' + watchedClass + '"><div class="videowatched"' + watchedTooltip + '><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div></div>' +
-              '<div class="watchedbutton"><a href="javascript:void(0)" tooltip="' + watchedButtonTooltip + '" onclick=\'' + watchedVidFunction + '("' + video.id + '");\'><img src="img/' + watchedButtonImage + '_32x32.png" /></a></div>' +
-              '<div class="videotitle" tooltip="' + video.title + '"><a target="_blank" rel="noopener noreferrer" class="videolink" onauxclick=\'markVidWatched("' + video.id + '");\' onclick=\'markVidWatched("' + video.id + '");\' href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a></div>' +
-              '<div class="videochannel">' + video.channel + '</div>' +
-              '<div class="videodate"><time class="timeago" datetime="' + video.published + '" tooltip="' + video.published + '"/></div>' +
-              '</div>');
+            setupWatchedInfo(video.watched);
+            $('#videos').append(showVideoBlock(video));
           }
         });
       }
@@ -204,19 +204,34 @@
       jQuery('time.timeago').timeago();
     }
 
+    function showVideoBlock(video, watchedButtonTooltip, watchedTooltip, watchedButtonImage, watchedVidFunction) {
+      var videoBlockHtml = "" +
+        '<div class="p-2 videoblock" id="' + video.id + '">' +
+        '<div class="videothumbnail' + watchedClass + '"><div class="videowatched"' + watchedTooltip + '><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div></div>' +
+        '<div class="watchedbutton"><a href="javascript:void(0)" tooltip="' + watchedButtonTooltip + '" onclick=\'' + watchedVidFunction + '("' + video.id + '");\'><img src="img/' + watchedButtonImage + '_32x32.png" /></a></div>' +
+        '<div class="videotitle" tooltip="' + video.title + '"><a target="_blank" rel="noopener noreferrer" class="videolink" onauxclick=\'markVidWatched("' + video.id + '");\' onclick=\'markVidWatched("' + video.id + '");\' href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a></div>' +
+        '<div class="videochannel">' + video.channel + '</div>' +
+        '<div class="videodate"><time class="timeago" datetime="' + video.published + '" tooltip="' + video.published + '"/></div>' +
+        '</div>';
+
+      return videoBlockHtml;
+    }
+
     function markVidWatched(vidId) {
+      var vidIndex = -1;
       vidCache.find(function (video, index) {
         if (video.id == vidId) {
           vidCache[index].watched = "yes";
+          vidIndex = index;
         }
       });
+
+      setupWatchedInfo("yes");
+      $('#' + vidId).html(showVideoBlock(vidCache[vidIndex]));
 
       if (showWatched == "no") {
         $('#' + vidId).css('display', 'none');
       }
-
-      $('#' + vidId).children('.videothumbnail').addClass('watched');
-      $('#' + vidId).children('.videothumbnail').children('videowatched').attr('tooltip', 'Watched');
 
       localStorage.setItem('videos', JSON.stringify(vidCache));
     }
@@ -228,8 +243,8 @@
         }
       });
 
-      $('#' + vidId).children('.videothumbnail').removeClass('watched');
-      $('#' + vidId).children('.videothumbnail').children('videowatched').removeAttr('tooltip');
+      setupWatchedInfo("no");
+      $('#' + vidId).html(showVideoBlock(vidCache[vidIndex]));
 
       localStorage.setItem('videos', JSON.stringify(vidCache));
     }
