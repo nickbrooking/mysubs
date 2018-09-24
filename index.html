@@ -147,10 +147,12 @@
 
     function getVideoDurations() {
       var idList = "";
+      var idCount = 0;
       for (var i = 0; i < vidCache.length; i++) {
         if (!vidCache[i].duration || vidCache[i].duration == '') {
           idList = idList + vidCache[i].id + ",";
-          if ((i + 1) % 50 == 0) {
+          idCount++;
+          if (idCount % 50 == 0) {
             var requestOptions = {
               id: idList,
               part: "contentDetails"
@@ -169,6 +171,7 @@
             });
 
             idList = "";
+            idCount = 0;
           }
         }
       }
