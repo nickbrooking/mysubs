@@ -153,28 +153,36 @@
           idList = idList + vidCache[i].id + ",";
           idCount++;
           if (idCount % 45 == 0) {
-            var requestOptions = {
-              id: idList,
-              part: "contentDetails"
-            };
-            var request = gapi.client.youtube.videos.list(requestOptions);
-            request.execute(function (response) {
-              var videos = {};
-              if (response.result && response.result.items.length > 0) {
-                videos = response.result.items;
-              }
-              $.each(videos, function (index, item) {
-                if (item.contentDetails) {
-                  cacheVidDuration(item);
-                }
-              });
-            });
+            queryDuration(idList);
 
             idList = "";
             idCount = 0;
           }
         }
       }
+
+      if (idCount > 0) {
+        queryDuration(idList);
+      }
+    }
+
+    function queryDuration(idList) {
+      var requestOptions = {
+        id: idList,
+        part: "contentDetails"
+      };
+      var request = gapi.client.youtube.videos.list(requestOptions);
+      request.execute(function (response) {
+        var videos = {};
+        if (response.result && response.result.items.length > 0) {
+          videos = response.result.items;
+        }
+        $.each(videos, function (index, item) {
+          if (item.contentDetails) {
+            cacheVidDuration(item);
+          }
+        });
+      });
     }
 
     function cacheVidDuration(item) {
