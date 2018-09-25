@@ -259,9 +259,9 @@
     }
 
     function convertDuration(duration) {
-      var h = moment().duration(duration).hours();
-      var m = moment().duration(duration).minutes();
-      var s = moment().duration(duration).seconds();
+      var h = moment.duration(duration).hours();
+      var m = moment.duration(duration).minutes();
+      var s = moment.duration(duration).seconds();
       var output = ((h == 0) ? "" : h + ":") +
         m + ":" + s;
       return output;
