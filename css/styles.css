@@ -47,10 +47,12 @@
 .videoduration {
     position: relative;
     margin-top: -10%;
-    margin-left: 75%;
+    margin-left: 77%;
     margin-bottom: 3%;
     padding-left: 5px;
-    background: rgba(0,0,0,.75)
+    padding-right: 5px;
+    background: rgba(0,0,0,.75);
+    text-align: right;
 }
 
 .videothumbnail:hover + .watchedbutton, .watchedbutton:hover {
