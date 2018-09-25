@@ -260,10 +260,9 @@
 
     function convertDuration(duration) {
       var h = ("0" + moment.duration(duration).hours()).slice(-2);
-      var m = ("0" + moment.duration(duration).minutes()).slice(-2);
+      var m = ((h == "00") ? moment.duration(duration).minutes() : ("0" + moment.duration(duration).minutes()).slice(-2));
       var s = ("0" + moment.duration(duration).seconds()).slice(-2);
-      var output = ((h == 0) ? "" : h + ":") +
-        m + ":" + s;
+      var output = ((h == "00") ? "" : h + ":") + m + ":" + s;
       return output;
     }
 
