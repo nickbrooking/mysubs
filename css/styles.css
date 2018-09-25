@@ -1,3 +1,9 @@
+.loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
 .watched {
     opacity: 0.5;
 }

@@ -18,15 +18,15 @@
         'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
         'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
         'scope': SCOPE
-      }).then(async function () {
+      }).then(function () {
         GoogleAuth = gapi.auth2.getAuthInstance();
         GoogleAuth.isSignedIn.listen(updateSigninStatus);
         var user = GoogleAuth.currentUser.get();
-        await setSigninStatus();
-        await loadFromStorage();
-        await requestSubscriptionList(true);
-        await getVideoDurations();
-        await showCachedVideos();
+        setSigninStatus();
+        loadFromStorage();
+        requestSubscriptionList(true);
+        getVideoDurations();
+        showCachedVideos();
       });
     }
 
@@ -60,7 +60,7 @@
       setSigninStatus();
     }
 
-    function requestSubscriptionList(fullCache, pageToken) {
+    async function requestSubscriptionList(fullCache, pageToken) {
       var requestOptions = {
         mine: true,
         part: 'snippet',
@@ -70,7 +70,7 @@
         requestOptions.pageToken = pageToken;
       }
       var request = gapi.client.youtube.subscriptions.list(requestOptions);
-      request.execute(function (response) {
+      let p = request.then(function (response) {
         totalResults = response.result.pageInfo.totalResults;
         localStorage.setItem('totalsubs', totalResults);
 
@@ -89,6 +89,8 @@
           requestSubscriptionList(fullCache, nextPageToken);
         }
       });
+
+      let done = await p;
     }
 
     function displayAndCacheSubResult(snippet) {
@@ -108,13 +110,13 @@
       localStorage.setItem('subscriptions', JSON.stringify(subCache));
     }
 
-    function getChannelUploadsPlaylist(id) {
+    async function getChannelUploadsPlaylist(id) {
       var requestOptions = {
         id: id,
         part: 'snippet,contentDetails'
       };
       var request = gapi.client.youtube.channels.list(requestOptions);
-      request.execute(function (response) {
+      let p = request.then(function (response) {
         var uploadId = "";
         if (response.result && response.result.items.length > 0 && response.result.items[0].contentDetails) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
@@ -123,16 +125,18 @@
           getPlaylistVideos(uploadId);
         }
       });
+
+      let done = await p;
     }
 
-    function getPlaylistVideos(id) {
+    async function getPlaylistVideos(id) {
       var requestOptions = {
         playlistId: id,
         part: 'snippet,contentDetails',
         maxResults: 10 
       };
       var request = gapi.client.youtube.playlistItems.list(requestOptions);
-      request.execute(function (response) {
+      let p = request.then(function (response) {
         var videos = {};
         if (response.result && response.result.items.length > 0) {
           videos = response.result.items;
@@ -143,6 +147,8 @@
           }
         });
       });
+
+      let done = await p;
     }
 
     function getVideoDurations() {
@@ -166,13 +172,13 @@
       }
     }
 
-    function queryDuration(idList) {
+    async function queryDuration(idList) {
       var requestOptions = {
         id: idList,
         part: "contentDetails"
       };
       var request = gapi.client.youtube.videos.list(requestOptions);
-      request.execute(function (response) {
+      let p = request.then(function (response) {
         var videos = {};
         if (response.result && response.result.items.length > 0) {
           videos = response.result.items;
@@ -183,6 +189,8 @@
           }
         });
       });
+
+      let done = await p;
     }
 
     function cacheVidDuration(item) {
