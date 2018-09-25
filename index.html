@@ -149,7 +149,7 @@
       var idList = "";
       var idCount = 0;
       for (var i = 0; i < vidCache.length; i++) {
-        if (!vidCache[i].duration || vidCache[i].duration == '') {
+        if (vidCache[i].duration == '') {
           idList = idList + vidCache[i].id + ",";
           idCount++;
           if (idCount % 45 == 0) {
