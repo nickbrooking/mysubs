@@ -57,7 +57,9 @@
     margin-left: 3px;
     padding-left: 3px;
     padding-right: 3px;
-    background: rgba(0,0,0,.75);
+    background: rgba(0,0,0,.9);
+    border-width: 1px;
+    border-style: solid;
 }
 
 .videothumbnail:hover + .watchedbutton, .watchedbutton:hover {
