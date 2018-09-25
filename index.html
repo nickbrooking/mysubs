@@ -24,7 +24,7 @@
         var user = GoogleAuth.currentUser.get();
         setSigninStatus();
         loadFromStorage();
-        requestSubscriptionList(true);
+        requestSubscriptionList(true, null, requestSubscriptionListCallback);
         getVideoDurations();
         showCachedVideos();
       });
@@ -60,7 +60,11 @@
       setSigninStatus();
     }
 
-    function requestSubscriptionList(fullCache, pageToken) {
+    function requestSubscriptionListCallback(response) {
+      return response;
+    }
+
+    function requestSubscriptionList(fullCache, pageToken, callback) {
       var requestOptions = {
         mine: true,
         part: 'snippet',
@@ -88,6 +92,8 @@
         if (nextPageToken && fullCache) {
           requestSubscriptionList(fullCache, nextPageToken);
         }
+
+        callback(true);
       });
     }
 
@@ -386,7 +392,7 @@
   </nav>
 
   <div id="main-content" class="container-fluid">
-    <div id="videos" class="d-flex flex-wrap"></div>
+    <div id="videos" class="d-flex flex-wrap"><div class="loader"><img src="/img/ajax-loader.gif" /></div></div>
   </div>
 </body>
 </html>
