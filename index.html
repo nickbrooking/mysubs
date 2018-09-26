@@ -73,7 +73,7 @@
         requestOptions.pageToken = pageToken;
       }
       var request = gapi.client.youtube.subscriptions.list(requestOptions);
-      let p = request.then(function (response) {
+      let p = request.then(async function (response) {
         totalResults = response.result.pageInfo.totalResults;
         localStorage.setItem('totalsubs', totalResults);
 
@@ -120,7 +120,7 @@
         part: 'snippet,contentDetails'
       };
       var request = gapi.client.youtube.channels.list(requestOptions);
-      let p = request.then(function (response) {
+      let p = request.then(async function (response) {
         var uploadId = "";
         if (response.result && response.result.items.length > 0 && response.result.items[0].contentDetails) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
