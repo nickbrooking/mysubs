@@ -18,15 +18,18 @@
         'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
         'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
         'scope': SCOPE
-      }).then(async function () {
+      }).then(function () {
         GoogleAuth = gapi.auth2.getAuthInstance();
         GoogleAuth.isSignedIn.listen(updateSigninStatus);
         var user = GoogleAuth.currentUser.get();
-        await setSigninStatus();
-        await loadFromStorage();
-        await requestSubscriptionList(true);
-        await getVideoDurations();
-        await showCachedVideos();
+        setSigninStatus();
+        loadFromStorage();
+      }).then(function () {
+        requestSubscriptionList(true);
+      }).then(function () {
+        getVideoDurations();
+      }).then(function () {
+        showCachedVideos();
       });
     }
 
@@ -86,11 +89,12 @@
         $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
 
         if (nextPageToken && fullCache) {
-          requestSubscriptionList(fullCache, nextPageToken);
+          await requestSubscriptionList(fullCache, nextPageToken);
         }
       });
 
       let done = await p;
+      return done;
     }
 
     function displayAndCacheSubResult(snippet) {
@@ -122,11 +126,12 @@
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
         }
         if (uploadId) {
-          getPlaylistVideos(uploadId);
+          await getPlaylistVideos(uploadId);
         }
       });
 
       let done = await p;
+      return done;
     }
 
     async function getPlaylistVideos(id) {
@@ -149,17 +154,19 @@
       });
 
       let done = await p;
+      return done;
     }
 
-    function getVideoDurations() {
+    async function getVideoDurations() {
       var idList = "";
       var idCount = 0;
+      var p;
       for (var i = 0; i < vidCache.length; i++) {
         if (vidCache[i].duration == '') {
           idList = idList + vidCache[i].id + ",";
           idCount++;
           if (idCount % 45 == 0) {
-            queryDuration(idList);
+            p = await queryDuration(idList);
 
             idList = "";
             idCount = 0;
@@ -168,8 +175,10 @@
       }
 
       if (idCount > 0) {
-        queryDuration(idList);
+        p = await queryDuration(idList);
       }
+
+      return p;
     }
 
     async function queryDuration(idList) {
@@ -191,6 +200,7 @@
       });
 
       let done = await p;
+      return done;
     }
 
     function cacheVidDuration(item) {
