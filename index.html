@@ -18,15 +18,15 @@
         'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
         'clientId': '308367933513-qiuvgmgolbplhu64gtcao95res6mu8ou.apps.googleusercontent.com',
         'scope': SCOPE
-      }).then(function () {
+      }).then(async function () {
         GoogleAuth = gapi.auth2.getAuthInstance();
         GoogleAuth.isSignedIn.listen(updateSigninStatus);
         var user = GoogleAuth.currentUser.get();
-        setSigninStatus();
-        loadFromStorage();
-        requestSubscriptionList(true);
-        getVideoDurations();
-        showCachedVideos();
+        await setSigninStatus();
+        await loadFromStorage();
+        await requestSubscriptionList(true);
+        await getVideoDurations();
+        await showCachedVideos();
       });
     }
 
