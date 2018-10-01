@@ -277,7 +277,7 @@
         '<div class="videothumbnail' + watchedClass + '"><div class="videowatched"' + watchedTooltip + '><img src="https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg" class="img-fluid" /></div></div>' +
         '<div class="watchedbutton"><a href="javascript:void(0)" tooltip="' + watchedButtonTooltip + '" onclick=\'markVidWatched("' + video.id + '","' + video.watched + '"); \'><img src="img/' + watchedButtonImage + '_32x32.png" /></a></div>' +
         '<div class="videoduration">' + convertDuration(video.duration) + '</div>' +
-        '<div class="videotitle" tooltip="' + video.title + '"><a target="_blank" rel="noopener noreferrer" class="videolink" onauxclick=\'markVidWatched("' + video.id + '","' + video.watched + '");\' onclick=\'markVidWatched("' + video.id + '","' + video.watched + '");\' href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a></div>' +
+        '<div class="videotitle" tooltip="' + JSON.stringify(video.title) + '"><a target="_blank" rel="noopener noreferrer" class="videolink" onauxclick=\'markVidWatched("' + video.id + '","' + video.watched + '");\' onclick=\'markVidWatched("' + video.id + '","' + video.watched + '");\' href="https://www.youtube.com/watch?v=' + video.id + '">' + video.title + '</a></div>' +
         '<div class="videochannel">' + video.channel + '</div>' +
         '<div class="videodate"><time class="timeago" datetime="' + video.published + '" tooltip="' + video.published + '"/></div>';
 
