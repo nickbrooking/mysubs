@@ -8,7 +8,7 @@
     var GoogleAuth;
     var SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
     var nextPageToken, prevPageToken, totalResults, subCache, vidCache, showWatched,
-      watchedClass, watchedButtonTooltip, watchedTooltip, watchedButtonImage;
+      watchedClass, watchedButtonTooltip, watchedTooltip, watchedButtonImage, firebaseDb;
 
     function handleClientLoad() {
       gapi.load('client:auth2', initClient);
@@ -116,6 +116,7 @@
               providerData: providerData
             }, null, '  ');
           });
+          firebaseDb = firebase.database();
         } else {
           // User is signed out.
           document.getElementById('fb-sign-in-status').textContent = 'Signed out';
@@ -465,18 +466,14 @@
           </div>
         </li>
         <li class="nav-item dropdown">
-          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="dropdown" id="firebaseui-auth-container" role="button" aria-haspopup="true" aria-expanded="false">Firebase</button>
-          <div class="dropdown-menu" aria-labelledby="firebaseui-auth-container">
-            <a class="dropdown-item" id="fb-sign-in" href="#" onclick="firebase.auth().signIn();">Sign In</a>
-            <a class="dropdown-item" id="fb-sign-in-status" href="#" onclick="">Status</a>
-            <a class="dropdown-item" id="fb-account-details" href="#" onclick="">Details</a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
           <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="dropdown" id="auth-status" role="button" aria-haspopup="true" aria-expanded="false">User</button>
           <div class="dropdown-menu" aria-labelledby="auth-status">
             <a class="dropdown-item" id="sign-in-or-out-button" href="#" onclick="handleAuthClick();">Sign In</a>
             <a class="dropdown-item" id="revoke-access-button" href="#" onclick="revokeAccess();">Revoke Access</a>
+            <hr class="dropdown-separator" />
+            <a class="dropdown-item" id="firebaseui-auth-container" onclick="firebase.auth().signIn();"></a>
+            <a class="dropdown-item" id="fb-sign-in-status" href="#" onclick="">Status</a>
+            <a class="dropdown-item" id="fb-account-details" href="#" onclick="">Details</a>
           </div>
         </li>
       </ul>
