@@ -63,32 +63,33 @@
       setSigninStatus();
     }
 
-    var config = {
-      apiKey: "AIzaSyC6yix2GVSnyfHhIx2eneo4I2SSs14OUXs",
-      authDomain: "my-subs-216113.firebaseapp.com",
-      databaseURL: "https://my-subs-216113.firebaseio.com",
-      projectId: "my-subs-216113",
-      storageBucket: "my-subs-216113.appspot.com",
-      messagingSenderId: "308367933513"
-    };
-    firebase.initializeApp(config);
 
-    // FirebaseUI config.
-    var uiConfig = {
-      signInOptions: [{
-        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        authMethod: 'https://accounts.google.com',
-        clientId: '308367933513-oj8h1igrri01tn2i0jlpbq7bi72024a6.apps.googleusercontent.com',
-      }],
-      credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
-    };
+    function initFirebase() {
+      var config = {
+        apiKey: "AIzaSyC6yix2GVSnyfHhIx2eneo4I2SSs14OUXs",
+        authDomain: "my-subs-216113.firebaseapp.com",
+        databaseURL: "https://my-subs-216113.firebaseio.com",
+        projectId: "my-subs-216113",
+        storageBucket: "my-subs-216113.appspot.com",
+        messagingSenderId: "308367933513"
+      };
 
-    // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig);
+      firebase.initializeApp(config);
+      
+      var uiConfig = {
+        signInOptions: [{
+          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          authMethod: 'https://accounts.google.com',
+          clientId: '308367933513-oj8h1igrri01tn2i0jlpbq7bi72024a6.apps.googleusercontent.com',
+        }],
+        credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+      };
 
-    initApp = function () {
+      // Initialize the FirebaseUI Widget using Firebase.
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      // The start method will wait until the DOM is loaded.
+      ui.start('#firebaseui-auth-container', uiConfig);
+
       firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
           // User is signed in.
@@ -123,10 +124,6 @@
         console.log(error);
       });
     };
-
-    window.addEventListener('load', function () {
-      initApp();
-    });
 
     async function requestSubscriptionList(fullCache, pageToken) {
       var requestOptions = {
@@ -466,11 +463,11 @@
           </div>
         </li>
         <li class="nav-item dropdown">
-          <button class="btn btrn-outline-light m-2 dropdown-toggle" href="#" data-toggle="dropdown" id="firebaseui-auth-container" role="button" aria-haspopup="true" aria-expanded="false">Firebase</button>
+          <button class="btn btn-outline-light m-2 dropdown-toggle" href="#" data-toggle="dropdown" id="firebaseui-auth-container" role="button" aria-haspopup="true" aria-expanded="false">Firebase</button>
           <div class="dropdown-menu" aria-labelledby="firebaseui-auth-container">
-            <a class="dropdown-item" id="fb-sign-in-status" href="#" onclick=""></a>
-            <a class="dropdown-item" id="fb-sign-in" href="#" onclick=""></a>
-            <a class="dropdown-item" id="fb-account-details" href="#" onclick=""></a>
+            <a class="dropdown-item" id="fb-sign-in" href="#" onclick="firebase.auth().signIn();">Sign In</a>
+            <a class="dropdown-item" id="fb-sign-in-status" href="#" onclick="">Status</a>
+            <a class="dropdown-item" id="fb-account-details" href="#" onclick="">Details</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -498,9 +495,11 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
 <link rel="stylesheet" href="css/styles.css" />
 <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
 <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
 <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload = function () { }; handleClientLoad(); "
+        onload="this.onload = function () { }; handleClientLoad(); initFirebase(); "
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
