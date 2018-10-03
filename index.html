@@ -26,11 +26,8 @@
         var user = GoogleAuth.currentUser.get();
         setSigninStatus();
         loadFromStorage();
-      }).then(function () {
         requestSubscriptionList(true);
-      }).then(function () {
         getVideoDurations();
-      }).then(function () {
         showCachedVideos();
       });
     }
@@ -64,7 +61,6 @@
     function updateSigninStatus(isSignedIn) {
       setSigninStatus();
     }
-
 
     function initFirebase() {
       var config = {
@@ -128,7 +124,7 @@
       });
     };
 
-    async function requestSubscriptionList(fullCache, pageToken) {
+    function requestSubscriptionList(fullCache, pageToken) {
       var requestOptions = {
         mine: true,
         part: 'snippet',
@@ -138,7 +134,7 @@
         requestOptions.pageToken = pageToken;
       }
       var request = gapi.client.youtube.subscriptions.list(requestOptions);
-      let p = request.then(async function (response) {
+      request.then(async function (response) {
         totalResults = response.result.pageInfo.totalResults;
         localStorage.setItem('totalsubs', totalResults);
 
@@ -154,12 +150,9 @@
         $('#sub-info').html('Total Subs: ' + totalResults + '<br>Cached Subs: ' + subCache.length);
 
         if (nextPageToken && fullCache) {
-          await requestSubscriptionList(fullCache, nextPageToken);
+          requestSubscriptionList(fullCache, nextPageToken);
         }
       });
-
-      let done = await p;
-      return done;
     }
 
     function displayAndCacheSubResult(snippet) {
@@ -179,34 +172,31 @@
       localStorage.setItem('subscriptions', JSON.stringify(subCache));
     }
 
-    async function getChannelUploadsPlaylist(id) {
+    function getChannelUploadsPlaylist(id) {
       var requestOptions = {
         id: id,
         part: 'snippet,contentDetails'
       };
       var request = gapi.client.youtube.channels.list(requestOptions);
-      let p = request.then(async function (response) {
+      request.then(async function (response) {
         var uploadId = "";
         if (response.result && response.result.items.length > 0 && response.result.items[0].contentDetails) {
           uploadId = response.result.items[0].contentDetails.relatedPlaylists.uploads;
         }
         if (uploadId) {
-          await getPlaylistVideos(uploadId);
+          getPlaylistVideos(uploadId);
         }
       });
-
-      let done = await p;
-      return done;
     }
 
-    async function getPlaylistVideos(id) {
+    function getPlaylistVideos(id) {
       var requestOptions = {
         playlistId: id,
         part: 'snippet,contentDetails',
         maxResults: 10
       };
       var request = gapi.client.youtube.playlistItems.list(requestOptions);
-      let p = request.then(function (response) {
+      request.then(function (response) {
         var videos = {};
         if (response.result && response.result.items.length > 0) {
           videos = response.result.items;
@@ -217,21 +207,17 @@
           }
         });
       });
-
-      let done = await p;
-      return done;
     }
 
-    async function getVideoDurations() {
+    function getVideoDurations() {
       var idList = "";
       var idCount = 0;
-      var p;
       for (var i = 0; i < vidCache.length; i++) {
         if (vidCache[i].duration == '') {
           idList = idList + vidCache[i].id + ",";
           idCount++;
           if (idCount % 45 == 0) {
-            p = await queryDuration(idList);
+            queryDuration(idList);
 
             idList = "";
             idCount = 0;
@@ -240,19 +226,19 @@
       }
 
       if (idCount > 0) {
-        p = await queryDuration(idList);
+        queryDuration(idList);
       }
 
       return p;
     }
 
-    async function queryDuration(idList) {
+    function queryDuration(idList) {
       var requestOptions = {
         id: idList,
         part: "contentDetails"
       };
       var request = gapi.client.youtube.videos.list(requestOptions);
-      let p = request.then(function (response) {
+      request.then(function (response) {
         var videos = {};
         if (response.result && response.result.items.length > 0) {
           videos = response.result.items;
@@ -263,9 +249,6 @@
           }
         });
       });
-
-      let done = await p;
-      return done;
     }
 
     function cacheVidDuration(item) {
