@@ -26,15 +26,9 @@
         var user = GoogleAuth.currentUser.get();
         setSigninStatus();
         loadFromStorage();
-        setTimeout(() => {
-          requestSubscriptionList(true);
-        }, 2000);
-        setTimeout(() => {
-          getVideoDurations();
-        }, 10000);
-        setTimeout(() => {
-          showCachedVideos();
-        }, 15000);
+        requestSubscriptionList(true);
+        getVideoDurations();
+        showCachedVideos();
       });
     }
 
