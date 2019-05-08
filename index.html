@@ -72,7 +72,7 @@
         requestOptions.pageToken = pageToken;
       }
       var request = gapi.client.youtube.subscriptions.list(requestOptions);
-      request.then(async function (response) {
+      request.then(function (response) {
         totalResults = response.result.pageInfo.totalResults;
         localStorage.setItem('totalsubs', totalResults);
 
@@ -413,5 +413,11 @@
 <script>
   $(document).ready(function () {
     handleClientLoad();
+    setInterval(function () {
+      loadFromStorage();
+      requestSubscriptionList(true);
+      getVideoDurations();
+      showCachedVideos();
+    }, 10 * 60 * 1000);
   });
 </script>
