@@ -413,11 +413,9 @@
 <script>
   $(document).ready(function () {
     handleClientLoad();
-    setInterval(function () {
-      loadFromStorage();
-      requestSubscriptionList(true);
-      getVideoDurations();
-      showCachedVideos();
-    }, 10 * 60 * 1000);
+    loadFromStorage();
+    requestSubscriptionList(true);
+    getVideoDurations();
+    showCachedVideos();
   });
 </script>
